@@ -28,7 +28,12 @@ router.get('/:id', (req, res) => {
     }, createRequest)
     .then(response => {
         // console.log(response)
-        res.send({code: 1, src: response.body.data[0].url})
+        res.send({
+            code: 1, 
+            data: {
+                src: response.body.data[0].url
+            }
+        })
     })
     .catch(e => {
         console.log(e)

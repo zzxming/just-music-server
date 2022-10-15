@@ -21,7 +21,7 @@ router.get('/search/local', async (req, res) => {
         where 
             m.music_name like '%${keywords}%' and s.singer_id = m.singer_id 
         limit 
-            ${(limit - 1) * 10}, 10
+            ${(limit - 1) * 10}, 20
     `)
     .then(async (localData) => {
         let locaResultData = []
@@ -59,8 +59,8 @@ router.get('/search/cloud', async (req, res) => {
     let result = await cloudsearch({
         keywords,
         type,
-        limit: 10,
-        offset: (limit - 1) * 10
+        limit: 20,
+        offset: (limit - 1) * 20
     })
     .catch(e => {
         res.send({code: 0, error: e, message: e.body.msg})
@@ -86,9 +86,28 @@ router.get('/info/:id', async (req, res) => {
         res.send({code: 0, error: e, message: e.message || e.code})
     });
     if (!result) return;
+    const {music_id, music_name, music_url, singer_id} = result[0];
+    let singersId = singer_id.split(',');
 
-
-    res.send({code: 1, data: result[0]})
+    Promise.all(
+        singersId.map(singerId => dbQuery(`select * from singer where singer_id = '${singerId}'`))
+    )
+    .then(singers => {
+        // 排除singer表中不存在的singer_id查找结果(空数组)
+        for (let i = 0; i < singers.length; i++) {
+            if (!singers[i][0]) {
+                singers.splice(i--, 1);
+            }
+            else {
+                singers[i] = singers[i][0];
+            }
+        }
+        res.send({code: 1, data: {music_id, music_name, music_url, singers}})
+    })
+    .catch(e => {
+        console.log(e)
+        res.send({code: 0, error: e, message: e.message})
+    })
 });
 
 
