@@ -2,18 +2,19 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 const path = require("path");
-const { dbQuery } = require("../tools");
-const { staticMusic, getAudioFromDir, musicPath } = require("./music");
+const { dbQuery } = require("../../tools");
+const { staticMusic, getAudioFromDir, musicPath } = require("../music");
 const router = require("express").Router();
 
 const biliAudioPathAbsolute = 'D:/cloud_music/bili_audio';
 const biliAudioPathRelative = 'bili_audio';
+
 router.get('/audio', async (req, res) => {
     const { query } = req;
     const { bv } = query;
 
     if (!bv) {
-        res.send({code: 0, message: '参数bv缺失'})
+        res.status(401).send({code: 0, message: '参数bv缺失'})
         return;
     }
 
@@ -64,16 +65,19 @@ router.get('/audio', async (req, res) => {
         // console.log(bvid, cid)
         let playinfo = await getPlayinfo(bvid, cid);
         if (!playinfo) {
-            res.send({code: 0, message: '视频id错误'});
+            res.status(404).send({code: 0, message: '视频没找到'});
             return;
         }
         let url = playinfo.dash.audio[0].baseUrl;
         // console.log(playinfo.dash.audio[0].baseUrl)
         await getAudio({url, bvid, title, singer}, req, res)
+        .catch(e => {
+            res.status(500).send({code: 0, error:e,  message: e.message || e.code});
+        })
     })
     .catch(err => {
         console.log('get bili video error', err)
-        res.send({code: 0, message: '视频没找到'})
+        res.status(500).send({code: 0, message: '视频没找到'})
     });
 
 
@@ -87,7 +91,6 @@ async function getPlayinfo(bvid, cid) {
     
     return await axios.get(`https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&fnval=4048`).then(response => response.data.data);
 }
-
 /** 解析 html 获取 initialState, 失败返回 null  */
 function parseHTMLGetInitalState(html) {
     let $ = cheerio.load(html);
@@ -108,25 +111,6 @@ function parseHTMLGetInitalState(html) {
     }
     // console.log(initialState)
     return JSON.parse(initialState)
-}
-
-
-/** 解析 html 获取 playinfo, 失败返回 null */
-function parseHTMLGetPlayinfo(html) {
-    let $ = cheerio.load(html)
-    let playinfoStr = $('script')[2].children[0].data.split('window.__playinfo__=')[1];
-    let title = $('title')[0].children[0].data;
-    try {
-        return {
-            title,
-            playinfo: JSON.parse(playinfoStr),
-        }
-    } 
-    catch(e) {
-        console.log(`playinfo parse error`)
-        console.log(e)
-        return null;
-    }
 }
 /**
  * 根据 url 下载 bilibili 的音频
@@ -164,12 +148,10 @@ async function getAudio({url, bvid, title, singer}, req, res) {
         })
         .catch(e => {
             console.log(e);
-            res.send({code: 0, error:e});
-            reject({code: 0});
+            reject(e);
         })
     })
 }
-
 /**
  * 保存音频
  * @param {string} path music path
@@ -192,3 +174,21 @@ async function saveAudio(path, { title, singer }) {
 module.exports = {
     router
 };
+
+/** 解析 html 获取 playinfo, 失败返回 null */
+function parseHTMLGetPlayinfo(html) {
+    let $ = cheerio.load(html)
+    let playinfoStr = $('script')[2].children[0].data.split('window.__playinfo__=')[1];
+    let title = $('title')[0].children[0].data;
+    try {
+        return {
+            title,
+            playinfo: JSON.parse(playinfoStr),
+        }
+    } 
+    catch(e) {
+        console.log(`playinfo parse error`)
+        console.log(e)
+        return null;
+    }
+}

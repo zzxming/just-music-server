@@ -2,29 +2,13 @@ const { cloudsearch } = require('NeteaseCloudMusicApi');
 const { fromFile } = require("file-type");
 const fs = require("fs");
 const path = require("path");
-const { dbQuery } = require('../tools');
+const { dbQuery } = require('../../tools');
 const router =  require("express").Router();
 
 const musicPath = 'D:/cloud_music'
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    staticMusic(id, req, res);
-});
 
-router.get('/info/:id', async (req, res) => {
-    const { id } = req.params;
-    let result = await dbQuery(`select * from music where music_id = '${id}'`).
-    catch(e => {
-        console.log(e)
-        res.send({code: 0, error: e})
-    });
-    if (!result) return;
-
-
-    res.send({code: 1, data: result[0]})
-})
-
+router.use('/cloud', require('./cloud').router)
 
 router.get('/search/local', async (req, res) => {
     let { kw: keywords, t: type, limit } = req.query;
@@ -41,25 +25,30 @@ router.get('/search/local', async (req, res) => {
     `)
     .then(async (localData) => {
         let locaResultData = []
+        // console.log(localData)
         for (let index = 0; index < localData.length; index ++) {
-            const { singer_id } = localData[index];
+            // 歌手 id 由逗号字符串拼接而成
+            let resultData = localData[index];
+            const singer_id = resultData.singer_id;
+            delete resultData.singer_id
             let singers_id = singer_id.split(',');
             // console.log(singers_id)
-            let singers_name = [];
-            for (let i = 0; i < singers_id.length; i++) {
-                let result = await dbQuery(`select * from singer_map where singer_id ='${singers_id[i]}'`)
-                singers_name.push(result[0].singer_name)
-                // console.log(result)
-            }
-            // console.log(singers_name, 'name')
-            locaResultData[index] = { ...localData[index], singer_id: singers_id, singer_name: singers_name }
+            let singers = [];
+            await Promise.all(singers_id.map(async singerId => {
+                let result = await dbQuery(`select * from singer where singer_id ='${singerId}'`)
+                if (result.length < 1) return;
+                singers.push({...result[0]})
+            }))
+            // console.log(singers)
+            locaResultData[index] = { ...resultData, singers }
+
         }
         // console.log(locaResultData)
         res.send({code: 1, data: [...locaResultData]})
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.error});
+        res.send({code: 0, error: e, message: e.message || e.code});
     })
 });
 router.get('/search/cloud', async (req, res) => {
@@ -85,7 +74,22 @@ router.get('/search/cloud', async (req, res) => {
     res.send({code: 1, data: result.body.result.songs})
 });
 
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    staticMusic(id, req, res);
+});
+router.get('/info/:id', async (req, res) => {
+    const { id } = req.params;
+    let result = await dbQuery(`select * from music where music_id = '${id}'`).
+    catch(e => {
+        console.log(e)
+        res.send({code: 0, error: e, message: e.message || e.code})
+    });
+    if (!result) return;
 
+
+    res.send({code: 1, data: result[0]})
+});
 
 
 
@@ -155,7 +159,7 @@ async function staticMusic(staticPath, req, res) {
         let id = staticPath;
         let result = await dbQuery(`select music_url from music where music_id = '${id}'`)
         if (result.length < 1) {
-            res.send({code: 0, message: '未找到歌曲'});
+            res.status(401).send({code: 0, message: '未找到歌曲'});
             return;
         }
         filePath = path.resolve(musicPath, result[0].music_url)
@@ -195,7 +199,7 @@ async function staticMusic(staticPath, req, res) {
     }
     catch(e) {
         console.log(e, `static read error`)
-        res.status(500).send({code: 0, error: e})
+        res.status(500).send({code: 0, error: e, message: e.message || e.code})
     }
 }
 
