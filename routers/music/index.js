@@ -48,7 +48,14 @@ router.get('/search/local', async (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.message || e.code});
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     })
 });
 router.get('/search/cloud', async (req, res) => {
@@ -63,7 +70,14 @@ router.get('/search/cloud', async (req, res) => {
         offset: (limit - 1) * 20
     })
     .catch(e => {
-        res.send({code: 0, error: e, message: e.body.msg})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     });
     if (!result) return;
     if (result.status !== 200) {
@@ -106,7 +120,14 @@ router.get('/info/:id', async (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.message})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     })
 });
 
@@ -218,7 +239,14 @@ async function staticMusic(staticPath, req, res) {
     }
     catch(e) {
         console.log(e, `static read error`)
-        res.status(500).send({code: 0, error: e, message: e.message || e.code})
+        res.status(500).send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     }
 }
 

@@ -23,7 +23,14 @@ router.get('/highquality', (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.message || e.code || e.msg})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     });
 });
 router.get('/track', (req, res) => {
@@ -41,7 +48,14 @@ router.get('/track', (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.body.message || e.message || e.code})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     });
 });
 router.get('/detail', (req, res) => {
@@ -64,7 +78,14 @@ router.get('/detail', (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.body.message || e.message || e.code})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     });
 });
 

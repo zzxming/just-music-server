@@ -37,7 +37,14 @@ router.get('/:id', (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.send({code: 0, error: e, message: e.message || e.code})
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.msg.code
+        })
     })
 });
 

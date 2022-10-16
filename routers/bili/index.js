@@ -72,7 +72,14 @@ router.get('/audio', async (req, res) => {
         // console.log(playinfo.dash.audio[0].baseUrl)
         await getAudio({url, bvid, title, singer}, req, res)
         .catch(e => {
-            res.status(500).send({code: 0, error:e,  message: e.message || e.code});
+            res.status(500).send({
+                code: 0, 
+                error: {
+                    errno: e.body.msg.errno,
+                    code: e.body.msg.code,
+                }, 
+                message: e.message || e.code || e.body.msg.code
+            })
         })
     })
     .catch(err => {
@@ -168,7 +175,29 @@ async function saveAudio(path, { title, singer }) {
         // console.log(response)
         return response.insertId
     })
-} 
+}
+
+
+
+
+// 如果视频带分p, 获取会有问题
+// 修改获取的singer, 当前是singer是up主, 如果是联合投稿再加上"演唱"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = {
