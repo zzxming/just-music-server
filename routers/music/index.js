@@ -100,8 +100,9 @@ router.get('/info/:id', async (req, res) => {
         res.send({code: 0, error: e, message: e.message || e.code})
     });
     if (!result) return;
-    const {music_id, music_name, music_url, singer_id} = result[0];
-    let singersId = singer_id.split(',');
+    const music_info = { ...result[0] };
+    let singersId = music_info.singer_id.split(',');
+    delete music_info.singer_id
 
     Promise.all(
         singersId.map(singerId => dbQuery(`select * from singer where singer_id = '${singerId}'`))
@@ -116,7 +117,7 @@ router.get('/info/:id', async (req, res) => {
                 singers[i] = singers[i][0];
             }
         }
-        res.send({code: 1, data: {music_id, music_name, music_url, singers}})
+        res.send({code: 1, data: { ...music_info, singers }})
     })
     .catch(e => {
         console.log(e)

@@ -65,6 +65,7 @@ get, 根据本地数据库 music_id 获取音频相关信息
         music_id: number
         music_name: string
         music_url: string
+        music_cover: string
         singers: [
             {
                 singer_id: number
