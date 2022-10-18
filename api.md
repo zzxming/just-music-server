@@ -187,7 +187,7 @@ get, 通过网易云歌曲id获取歌曲信息
     data: {
         id: number,
         name: string,
-        at: [   // 歌手信息
+        ar: [   // 歌手信息
             {
                 id: number,
                 name: string

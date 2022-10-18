@@ -194,7 +194,7 @@ async function getAudioFromDir(dirPath) {
  */
 async function staticMusic(staticPath, req, res) {
     let filePath;
-    console.log(staticPath)
+    // console.log(staticPath)
     // 当是 id 时在数据库查找歌曲路径
     if (!isNaN(Number(staticPath))) {
         let id = staticPath;
