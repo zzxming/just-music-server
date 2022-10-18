@@ -46,13 +46,13 @@ get, 根据本地数据库 music_id 获取音频
     error?: Error
 }
 ```
-## **/info/:id**
+## **/info**
 get, 根据本地数据库 music_id 获取音频相关信息
 
 ```
 参数：
 {
-    params: {
+    query: {
         id: string
     }
 }
@@ -184,25 +184,23 @@ get, 通过网易云歌曲id获取歌曲信息
 成功返回：
 {
     code: number(1)
-    songs: [
-        {
-            id: number,
-            name: string,
-            at: [   // 歌手信息
-                {
-                    id: number,
-                    name: string
-                }
-            ]，
-            al: [   // 专辑信息
-                {
-                    id: number
-                    name: string
-                }
-            ]，
-            dt: number, 歌曲时长
-        }
-    ]
+    data: {
+        id: number,
+        name: string,
+        at: [   // 歌手信息
+            {
+                id: number,
+                name: string
+            }
+        ]，
+        al: [   // 专辑信息
+            {
+                id: number
+                name: string
+            }
+        ]，
+        dt: number, 歌曲时长
+    }
 }
 ```
 ```

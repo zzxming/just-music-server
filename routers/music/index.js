@@ -88,12 +88,9 @@ router.get('/search/cloud', async (req, res) => {
     res.send({code: 1, data: result.body.result.songs})
 });
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    staticMusic(id, req, res);
-});
-router.get('/info/:id', async (req, res) => {
-    const { id } = req.params;
+
+router.get('/info', async (req, res) => {
+    const { id } = req.query;
     let result = await dbQuery(`select * from music where music_id = '${id}'`).
     catch(e => {
         console.log(e)
@@ -131,7 +128,10 @@ router.get('/info/:id', async (req, res) => {
         })
     })
 });
-
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    staticMusic(id, req, res);
+});
 
 
 
@@ -194,7 +194,7 @@ async function getAudioFromDir(dirPath) {
  */
 async function staticMusic(staticPath, req, res) {
     let filePath;
-    // console.log(staticPath)
+    console.log(staticPath)
     // 当是 id 时在数据库查找歌曲路径
     if (!isNaN(Number(staticPath))) {
         let id = staticPath;
