@@ -304,7 +304,7 @@ get, 获取网易云歌单中的所有歌曲
 成功返回(主要使用参数)：
 {
     code: number(1)
-    songs: [
+    data: [
         {
             al: {   // 专辑信息
                 id: number
@@ -348,22 +348,39 @@ get, 根据id获取网易云歌单的信息
 {
     code: number(1)
     data: {
-        playlist: {
-            id: number
-            name: string
-            coverImgUrl: string, 歌单封面图片路径
-            UpdateTime: number, 更新时间
-            createTime: number, 创建时间
-            description: string, 歌单简介
-            playCount: number, 播放
-            trackCount: number, 歌单内歌曲数量
-            creator: {
-                userId: number
-                nickname: string
-                avatarUrl: string, 用户头像图片路径
-            }, 创建者用户信息
-            tags: string[], tag名称数组
-        }
+        id: number
+        name: string
+        coverImgUrl: string, 歌单封面图片路径
+        UpdateTime: number, 更新时间
+        createTime: number, 创建时间
+        description: string, 歌单简介
+        playCount: number, 播放
+        trackCount: number, 歌单内歌曲数量
+        tracks: [
+            {
+                id: number,
+                name: string,
+                ar: [   // 歌手信息
+                    {
+                        id: number,
+                        name: string
+                    }
+                ]，
+                al: [   // 专辑信息
+                    {
+                        id: number
+                        name: string
+                    }
+                ]，
+                dt: number, 歌曲时长
+            }
+        ], 歌曲信息, 长度为10, 
+        creator: {
+            userId: number
+            nickname: string
+            avatarUrl: string, 用户头像图片路径
+        }, 创建者用户信息
+        tags: string[], tag名称数组
     }
 }
 ```

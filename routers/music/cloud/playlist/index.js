@@ -41,7 +41,7 @@ router.get('/track', (req, res) => {
         // console.log(response)
         const { code, songs, message } = response.body;
         if (code === 200) {
-            res.send({code: 1, data: { songs }});
+            res.send({code: 1, data: songs });
             return;
         }
         res.send({code: 0, message})
@@ -63,7 +63,7 @@ router.get('/detail', (req, res) => {
     // https://music.163.com/playlist?id=373955762
     playlist_detail({id})
     .then(response => {
-        console.log(response)
+        // console.log(response)
         const { code, playlist, message } = response.body;
         if (code === 200) {
             res.send({
