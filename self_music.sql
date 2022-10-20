@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2022-10-17 18:47:18
+Date: 2022-10-20 16:12:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,6 +25,7 @@ CREATE TABLE `music` (
   `singer_id` varchar(255) NOT NULL COMMENT '歌手id, 逗号分割',
   `music_url` varchar(255) NOT NULL COMMENT '音乐本地路径',
   `music_cover` varchar(255) NOT NULL DEFAULT '',
+  `album` varchar(255) NOT NULL DEFAULT '',
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`music_id`),
   KEY `singer_id` (`singer_id`)
@@ -33,61 +34,61 @@ CREATE TABLE `music` (
 -- ----------------------------
 -- Records of music
 -- ----------------------------
-INSERT INTO `music` VALUES ('1', '趁人之危', '1', 'bili_audio/BV1wV41187FK.mp3', '', '193000');
-INSERT INTO `music` VALUES ('2', 'Counting Stars', '2', 'counting stars/counting stars.mp3', '', '256000');
-INSERT INTO `music` VALUES ('3', 'Creepin\' up on You', '3', 'creepin\' up on you/creepin\' up on you.mp3', '', '293000');
-INSERT INTO `music` VALUES ('4', 'Eutopia', '4', 'Eutopia/Eutopia.mp3', '', '249000');
-INSERT INTO `music` VALUES ('5', 'How Long', '5', 'how long - Charlie Puth/how long-Charlie Puth.mp3', '', '198000');
-INSERT INTO `music` VALUES ('6', 'I Love You Forever', '6', 'i love you forever/i love you forever.mp3', '', '259000');
-INSERT INTO `music` VALUES ('7', 'Lock Me Up', '7', 'lock me up/lock me up.mp3', '', '209000');
-INSERT INTO `music` VALUES ('8', 'Morning Glory', '8', 'Morning Glory - (K)NoW_NAME/Morning Glory - (K)NoW_NAME.mp3', '', '220000');
-INSERT INTO `music` VALUES ('9', 'New Soul', '9', 'new soul/new soul.mp3', '', '200000');
-INSERT INTO `music` VALUES ('10', 'Overcomer', '10', 'overcomer/overcomer.mp3', '', '225000');
-INSERT INTO `music` VALUES ('11', 'Regression', '11', 'Regression - 阿云嘎/Regression-阿云嘎.mp3', '', '236000');
-INSERT INTO `music` VALUES ('12', 'September', '12', 'september - Earth, Wind & Fire/september-Earth, Wind & Fire.mp3', '', '214000');
-INSERT INTO `music` VALUES ('13', 'Stereo Hearts', '13', 'stereo hearts/stereo hearts.mp3', '', '211000');
-INSERT INTO `music` VALUES ('14', 'Until You', '14', 'until you/until you.mp3', '', '248000');
-INSERT INTO `music` VALUES ('15', 'We Own The Night', '15', 'we own the night/we own the night.mp3', '', '205000');
-INSERT INTO `music` VALUES ('16', 'What Do I Konw', '16', 'what do i konw/what do i konw.mp3', '', '237000');
-INSERT INTO `music` VALUES ('17', '½如梦', '17,18,19', '½如梦.mp3', '', '234000');
-INSERT INTO `music` VALUES ('18', '7 Years', '20', '7 years.mp3', '', '237000');
-INSERT INTO `music` VALUES ('19', 'Contact', '21,22', 'Contact.mp3', '', '141000');
-INSERT INTO `music` VALUES ('20', 'dududu', '23', 'dududu.m4a', '', '220000');
-INSERT INTO `music` VALUES ('21', 'HAVE A NICE DAY', '24', 'have a nice day.mp3', '', '240000');
-INSERT INTO `music` VALUES ('22', 'Imagination', '25', 'imagination.mp3', '', '217000');
-INSERT INTO `music` VALUES ('23', 'Love Story', '26', 'love store.mp3', '', '235000');
-INSERT INTO `music` VALUES ('24', 'Love Youself', '27', 'love youself.mp3', '', '232000');
-INSERT INTO `music` VALUES ('25', 'Magic', '28', 'Magic - One Direction.mp3', '', '184000');
-INSERT INTO `music` VALUES ('26', 'Marine Dreamin\' ', '29,30', 'Marine Dreamin\' .mp3', '', '206000');
-INSERT INTO `music` VALUES ('27', 'Masayume Chasing', '31', 'MASAYUME CHASING.mp3', '', '221000');
-INSERT INTO `music` VALUES ('28', 'Mine Mine', '32', 'mine mine.mp3', '', '268000');
-INSERT INTO `music` VALUES ('29', 'Mr.Music', '33,34,35,36,37,38,39', 'mr.music.mp3', '', '271000');
-INSERT INTO `music` VALUES ('30', 'You(=I)', '40', 'You(=I).mp3', '', '170000');
-INSERT INTO `music` VALUES ('31', 'Your Song', '41', 'your song.mp3', '', '180000');
-INSERT INTO `music` VALUES ('32', 'カサネテク (千层套路) ', '42', 'カサネテク (千层套路) .mp3', '', '262000');
-INSERT INTO `music` VALUES ('33', '爱的飞行日记', '32', '爱的飞行日记.mp3', '', '256000');
-INSERT INTO `music` VALUES ('34', '傲娇系男孩的告白日', '43,44', '傲娇系男孩的告白日.mp3', '', '178000');
-INSERT INTO `music` VALUES ('35', '【墨清弦&乐正龙牙】不正常恋爱物语', '45,46,47', '不正常恋爱物语.mp3', '', '279000');
-INSERT INTO `music` VALUES ('36', '单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin', '48,49', '单项地铁.mp3', '', '255000');
-INSERT INTO `music` VALUES ('37', '枫', '32', '枫.mp3', '', '275000');
-INSERT INTO `music` VALUES ('38', '黑凤梨', '50,51', '黑凤梨.mp3', '', '238000');
-INSERT INTO `music` VALUES ('39', '横竖撇点折', '52', '横竖撇点折.mp3', '', '229000');
-INSERT INTO `music` VALUES ('40', '回到过去', '32', '回到过去.mp3', '', '233000');
-INSERT INTO `music` VALUES ('41', '僵尸舞', '44,51,53', '僵尸舞.mp3', '', '181000');
-INSERT INTO `music` VALUES ('42', '快乐手账', '51', '快乐手账.mp3', '', '252000');
-INSERT INTO `music` VALUES ('43', '恋爱语音导航', '54', '恋爱语音导航.mp3', '', '241000');
-INSERT INTO `music` VALUES ('44', '流光月夜', '54,55,56,57,58,59', '流光月夜.m4a', '', '231000');
-INSERT INTO `music` VALUES ('45', '流浪诗人', '32', '流浪诗人.mp3', '', '169000');
-INSERT INTO `music` VALUES ('46', '魔术先生', '32', '魔术先生.mp3', '', '227000');
-INSERT INTO `music` VALUES ('47', '努力婊（hardworking bitch）', '60,61', '努力婊.mp3', '', '240000');
-INSERT INTO `music` VALUES ('48', '神的随波逐流', '54', '神的随波逐流.mp3', '', '256000');
-INSERT INTO `music` VALUES ('49', '霜雪千年', '43,51', '霜雪千年.mp3', '', '240000');
-INSERT INTO `music` VALUES ('50', '死神', '62', '死神.m4a', '', '180000');
-INSERT INTO `music` VALUES ('51', '她的睫毛', '32', '她的睫毛.mp3', '', '233000');
-INSERT INTO `music` VALUES ('52', '游园会', '32', '游园会.mp3', '', '205000');
-INSERT INTO `music` VALUES ('53', '夜宴风波', '54', '夜宴风波.mp3', '', '255000');
-INSERT INTO `music` VALUES ('54', '星之回响【2020拜年祭单品】', '63,54,65,66,67,68,69,64', 'bili_audio/BV1KJ411C7qF.mp3', 'http://i2.hdslb.com/bfs/archive/c39ad6fbe8ce79d4e0ff9b1dc76b02c37aa14907.jpg', '300000');
-INSERT INTO `music` VALUES ('55', '【原神生日会】如果突然想起我', '70', 'bili_audio/BV1tG4y1B7xU.mp3', 'http://i1.hdslb.com/bfs/archive/262b48d3314562522d7698c9d089f8f10000f725.jpg', '231000');
+INSERT INTO `music` VALUES ('1', '趁人之危', '1', 'bili_audio/BV1wV41187FK.mp3', '', '趁人之危', '193000');
+INSERT INTO `music` VALUES ('2', 'Counting Stars', '2', 'counting stars/counting stars.mp3', '', 'Counting Stars', '256000');
+INSERT INTO `music` VALUES ('3', 'Creepin\' up on You', '3', 'creepin\' up on you/creepin\' up on you.mp3', '', 'Creepin\' up on You', '293000');
+INSERT INTO `music` VALUES ('4', 'Eutopia', '4', 'Eutopia/Eutopia.mp3', '', 'Eutopia', '249000');
+INSERT INTO `music` VALUES ('5', 'How Long', '5', 'how long - Charlie Puth/how long-Charlie Puth.mp3', '', 'How Long', '198000');
+INSERT INTO `music` VALUES ('6', 'I Love You Forever', '6', 'i love you forever/i love you forever.mp3', '', 'I Love You Forever', '259000');
+INSERT INTO `music` VALUES ('7', 'Lock Me Up', '7', 'lock me up/lock me up.mp3', '', 'Lock Me Up', '209000');
+INSERT INTO `music` VALUES ('8', 'Morning Glory', '8', 'Morning Glory - (K)NoW_NAME/Morning Glory - (K)NoW_NAME.mp3', '', 'Morning Glory', '220000');
+INSERT INTO `music` VALUES ('9', 'New Soul', '9', 'new soul/new soul.mp3', '', 'New Soul', '200000');
+INSERT INTO `music` VALUES ('10', 'Overcomer', '10', 'overcomer/overcomer.mp3', '', 'Overcomer', '225000');
+INSERT INTO `music` VALUES ('11', 'Regression', '11', 'Regression - 阿云嘎/Regression-阿云嘎.mp3', '', 'Regression', '236000');
+INSERT INTO `music` VALUES ('12', 'September', '12', 'september - Earth, Wind & Fire/september-Earth, Wind & Fire.mp3', '', 'September', '214000');
+INSERT INTO `music` VALUES ('13', 'Stereo Hearts', '13', 'stereo hearts/stereo hearts.mp3', '', 'Stereo Hearts', '211000');
+INSERT INTO `music` VALUES ('14', 'Until You', '14', 'until you/until you.mp3', '', 'Until You', '248000');
+INSERT INTO `music` VALUES ('15', 'We Own The Night', '15', 'we own the night/we own the night.mp3', '', 'We Own The Night', '205000');
+INSERT INTO `music` VALUES ('16', 'What Do I Konw', '16', 'what do i konw/what do i konw.mp3', '', 'What Do I Konw', '237000');
+INSERT INTO `music` VALUES ('17', '½如梦', '17,18,19', '½如梦.mp3', '', '½如梦', '234000');
+INSERT INTO `music` VALUES ('18', '7 Years', '20', '7 years.mp3', '', '7 Years', '237000');
+INSERT INTO `music` VALUES ('19', 'Contact', '21,22', 'Contact.mp3', '', 'Contact', '141000');
+INSERT INTO `music` VALUES ('20', 'dududu', '23', 'dududu.m4a', '', 'dududu', '220000');
+INSERT INTO `music` VALUES ('21', 'HAVE A NICE DAY', '24', 'have a nice day.mp3', '', 'HAVE A NICE DAY', '240000');
+INSERT INTO `music` VALUES ('22', 'Imagination', '25', 'imagination.mp3', '', 'Imagination', '217000');
+INSERT INTO `music` VALUES ('23', 'Love Story', '26', 'love store.mp3', '', 'Love Story', '235000');
+INSERT INTO `music` VALUES ('24', 'Love Youself', '27', 'love youself.mp3', '', 'Love Youself', '232000');
+INSERT INTO `music` VALUES ('25', 'Magic', '28', 'Magic - One Direction.mp3', '', 'Magic', '184000');
+INSERT INTO `music` VALUES ('26', 'Marine Dreamin\' ', '29,30', 'Marine Dreamin\' .mp3', '', 'Marine Dreamin\' ', '206000');
+INSERT INTO `music` VALUES ('27', 'Masayume Chasing', '31', 'MASAYUME CHASING.mp3', '', 'Masayume Chasing', '221000');
+INSERT INTO `music` VALUES ('28', 'Mine Mine', '32', 'mine mine.mp3', '', 'Mine Mine', '268000');
+INSERT INTO `music` VALUES ('29', 'Mr.Music', '33,34,35,36,37,38,39', 'mr.music.mp3', '', 'Mr.Music', '271000');
+INSERT INTO `music` VALUES ('30', 'You(=I)', '40', 'You(=I).mp3', '', 'You(=I)', '170000');
+INSERT INTO `music` VALUES ('31', 'Your Song', '41', 'your song.mp3', '', 'Your Song', '180000');
+INSERT INTO `music` VALUES ('32', 'カサネテク (千层套路) ', '42', 'カサネテク (千层套路) .mp3', '', 'カサネテク (千层套路) ', '262000');
+INSERT INTO `music` VALUES ('33', '爱的飞行日记', '32', '爱的飞行日记.mp3', '', '爱的飞行日记', '256000');
+INSERT INTO `music` VALUES ('34', '傲娇系男孩的告白日', '43,44', '傲娇系男孩的告白日.mp3', '', '傲娇系男孩的告白日', '178000');
+INSERT INTO `music` VALUES ('35', '【墨清弦&乐正龙牙】不正常恋爱物语', '45,46,47', '不正常恋爱物语.mp3', '', '【墨清弦&乐正龙牙】不正常恋爱物语', '279000');
+INSERT INTO `music` VALUES ('36', '单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin', '48,49', '单项地铁.mp3', '', '单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin\r\n单向地铁 Feat.Karin', '255000');
+INSERT INTO `music` VALUES ('37', '枫', '32', '枫.mp3', '', '枫', '275000');
+INSERT INTO `music` VALUES ('38', '黑凤梨', '50,51', '黑凤梨.mp3', '', '黑凤梨', '238000');
+INSERT INTO `music` VALUES ('39', '横竖撇点折', '52', '横竖撇点折.mp3', '', '横竖撇点折', '229000');
+INSERT INTO `music` VALUES ('40', '回到过去', '32', '回到过去.mp3', '', '回到过去', '233000');
+INSERT INTO `music` VALUES ('41', '僵尸舞', '44,51,53', '僵尸舞.mp3', '', '僵尸舞', '181000');
+INSERT INTO `music` VALUES ('42', '快乐手账', '51', '快乐手账.mp3', '', '快乐手账', '252000');
+INSERT INTO `music` VALUES ('43', '恋爱语音导航', '54', '恋爱语音导航.mp3', '', '恋爱语音导航', '241000');
+INSERT INTO `music` VALUES ('44', '流光月夜', '54,55,56,57,58,59', '流光月夜.m4a', '', '流光月夜', '231000');
+INSERT INTO `music` VALUES ('45', '流浪诗人', '32', '流浪诗人.mp3', '', '流浪诗人', '169000');
+INSERT INTO `music` VALUES ('46', '魔术先生', '32', '魔术先生.mp3', '', '魔术先生', '227000');
+INSERT INTO `music` VALUES ('47', '努力婊（hardworking bitch）', '60,61', '努力婊.mp3', '', '努力婊（hardworking bitch）', '240000');
+INSERT INTO `music` VALUES ('48', '神的随波逐流', '54', '神的随波逐流.mp3', '', '神的随波逐流', '256000');
+INSERT INTO `music` VALUES ('49', '霜雪千年', '43,51', '霜雪千年.mp3', '', '霜雪千年', '240000');
+INSERT INTO `music` VALUES ('50', '死神', '62', '死神.m4a', '', '死神', '180000');
+INSERT INTO `music` VALUES ('51', '她的睫毛', '32', '她的睫毛.mp3', '', '她的睫毛', '233000');
+INSERT INTO `music` VALUES ('52', '游园会', '32', '游园会.mp3', '', '游园会', '205000');
+INSERT INTO `music` VALUES ('53', '夜宴风波', '54', '夜宴风波.mp3', '', '夜宴风波', '255000');
+INSERT INTO `music` VALUES ('54', '星之回响【2020拜年祭单品】', '63,54,65,66,67,68,69,64', 'bili_audio/BV1KJ411C7qF.mp3', 'http://i2.hdslb.com/bfs/archive/c39ad6fbe8ce79d4e0ff9b1dc76b02c37aa14907.jpg', '星之回响【2020拜年祭单品】', '300000');
+INSERT INTO `music` VALUES ('55', '【原神生日会】如果突然想起我', '70', 'bili_audio/BV1tG4y1B7xU.mp3', 'http://i1.hdslb.com/bfs/archive/262b48d3314562522d7698c9d089f8f10000f725.jpg', '【原神生日会】如果突然想起我', '231000');
 
 -- ----------------------------
 -- Table structure for singer

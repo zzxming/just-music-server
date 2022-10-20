@@ -1,4 +1,3 @@
-const { cloudsearch } = require('NeteaseCloudMusicApi');
 const { fromFile } = require("file-type");
 const fs = require("fs");
 const path = require("path");
@@ -7,86 +6,8 @@ const router =  require("express").Router();
 
 const musicPath = 'D:/cloud_music'
 
-
-router.use('/cloud', require('./cloud').router)
-
-router.get('/search/local', async (req, res) => {
-    let { kw: keywords, t: type, limit } = req.query;
-    if (!limit) limit = 1
-    dbQuery(`
-        select
-            m.* 
-        from 
-            music m, singer s
-        where 
-            m.music_name like '%${keywords}%' and s.singer_id = m.singer_id 
-        limit 
-            ${(limit - 1) * 10}, 20
-    `)
-    .then(async (localData) => {
-        let locaResultData = []
-        // console.log(localData)
-        for (let index = 0; index < localData.length; index ++) {
-            // 歌手 id 由逗号字符串拼接而成
-            let resultData = localData[index];
-            const singer_id = resultData.singer_id;
-            delete resultData.singer_id
-            let singers_id = singer_id.split(',');
-            // console.log(singers_id)
-            let singers = [];
-            await Promise.all(singers_id.map(async singerId => {
-                let result = await dbQuery(`select * from singer where singer_id ='${singerId}'`)
-                if (result.length < 1) return;
-                singers.push({...result[0]})
-            }))
-            // console.log(singers)
-            locaResultData[index] = { ...resultData, singers }
-
-        }
-        // console.log(locaResultData)
-        res.send({code: 1, data: [...locaResultData]})
-    })
-    .catch(e => {
-        console.log(e)
-        res.send({
-            code: 0, 
-            error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
-            }, 
-            message: e.message || e.code || e.body.msg.code
-        })
-    })
-});
-router.get('/search/cloud', async (req, res) => {
-    let { kw: keywords, t: type, limit } = req.query;
-    // console.log(keywords, type, limit)
-    // 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频
-    if (!limit) limit = 1;
-    let result = await cloudsearch({
-        keywords,
-        type,
-        limit: 20,
-        offset: (limit - 1) * 20
-    })
-    .catch(e => {
-        res.send({
-            code: 0, 
-            error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
-            }, 
-            message: e.message || e.code || e.body.msg.code
-        })
-    });
-    if (!result) return;
-    if (result.status !== 200) {
-        console.log(result)
-        res.send({code: 0, data: [], result})
-        return;
-    }
-    res.send({code: 1, data: result.body.result.songs})
-});
+router.use('/cloud', require('./cloud').router);
+router.use('/search', require('./search').router);
 
 
 router.get('/info', async (req, res) => {
@@ -124,7 +45,7 @@ router.get('/info', async (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     })
 });
@@ -246,7 +167,7 @@ async function staticMusic(staticPath, req, res) {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     }
 }

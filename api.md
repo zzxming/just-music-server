@@ -21,6 +21,46 @@ get, 根据哔哩哔哩 bv 号获取音频
     error: Error
 }
 ```
+## **/info** 
+get, 根据哔哩哔哩 bv 号获取音频信息
+
+```
+参数：
+{
+    query: {
+        bv: string
+    }
+}
+```
+```
+成功返回：
+{
+    code: number(1)
+    data: {
+        bvid: number
+        cid: number
+        cover: string
+        duration: number
+        album: string
+        singers: [
+            {
+                id: number
+                name: string
+            }
+        ]
+        title: string
+        src: string
+    }
+}
+```
+```
+失败返回：
+{
+    code: number(0)
+    message: string
+    error: Error
+}
+```
 
 
 # **/music**
@@ -66,6 +106,8 @@ get, 根据本地数据库 music_id 获取音频相关信息
         music_name: string
         music_url: string
         music_cover: string
+        album: string
+        duration: number
         singers: [
             {
                 singer_id: number
@@ -91,8 +133,9 @@ get, 根据关键字搜索本地数据库
 {
     query: {
         kw: string, 关键字
-        t: number, 同网易云音乐搜索 api 的 type
-        limit: number, 页数
+        t: number, 同网易云音乐搜索 api 的 type, 默认1
+        limit: number, 页数, 默认1
+        offset: number, 一次返回数据的个数, 默认10
     }
 }
 ```
@@ -105,6 +148,9 @@ get, 根据关键字搜索本地数据库
             music_id: number
             music_name: string
             music_url: string
+            music_cover: string
+            album: string
+            duration: number
             singers: [
                 {
                     singer_id: number
@@ -158,6 +204,7 @@ get, 根据关键字搜索网易云音乐
             dt: number, 歌曲时长
         }
     ]
+    count: number
 }
 ```
 ```

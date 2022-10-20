@@ -27,7 +27,7 @@ router.get('/info', (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     })
 });
@@ -54,7 +54,7 @@ router.get('/:id', (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     })
 });

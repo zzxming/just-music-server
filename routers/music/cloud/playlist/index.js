@@ -29,7 +29,7 @@ router.get('/highquality', (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     });
 });
@@ -54,7 +54,7 @@ router.get('/track', (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     });
 });
@@ -84,7 +84,7 @@ router.get('/detail', (req, res) => {
                 errno: e.body.msg.errno,
                 code: e.body.msg.code,
             }, 
-            message: e.message || e.code || e.body.msg.code
+            message: e.message || e.code || e.body.message || e.body.msg.code
         })
     });
 });
