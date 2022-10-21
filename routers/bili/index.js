@@ -25,7 +25,7 @@ router.get('/info', async (req, res) => {
     })
     .catch(e => {
         console.log(e)
-        res.status(500).send(e);
+        res.send(e);
     })
 });
 /** 保存并返回 bili 音频 */
@@ -37,7 +37,6 @@ router.get('/audio', async (req, res) => {
         res.status(401).send({code: 0, message: '参数bv缺失'})
         return;
     }
-
     // 本地已有, res 发送音频文件
     if ((await getAudioFromDir(musicPath)).includes(`${bv}.mp3`)) {
         await staticMusic(biliAudioPathRelative + `/${bv}.mp3`, req, res);
@@ -50,7 +49,7 @@ router.get('/audio', async (req, res) => {
     let initialState = await getBiliVideoInitialState(bv)
     .catch(e => {
         console.log(e)
-        res.status(500).send(e);
+        res.status(404).send(e);
     })
 
     await getAudio(initialState, req, res)

@@ -79,10 +79,11 @@ router.get('/cloud', async (req, res) => {
         res.send({code: 0, data: [], result})
         return;
     }
+    // console.dir(result)
     res.send({
         code: 1, 
-        data: result.body.result.songs || [], 
-        count: result.body.result.songCount
+        data: result.body?.result?.songs ?? [], 
+        count: result.body?.result?.songCount
     })
 });
 
