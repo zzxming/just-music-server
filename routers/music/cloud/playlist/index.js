@@ -1,7 +1,29 @@
 const router =  require("express").Router();
-const { top_playlist_highquality, createRequest, playlist_track_all, playlist_detail } = require("NeteaseCloudMusicApi");
+const { personalized, top_playlist_highquality, createRequest, playlist_track_all, playlist_detail } = require("NeteaseCloudMusicApi");
 
 
+/** 每日随机推荐, limit 为歌单数 */
+router.get('/personalized', (req, res) => {
+    const { limit } = req.query;
+    
+    personalized({limit})
+    .then(response => {
+        // console.log(response)
+        res.send({code: 1, data: response.body.result})
+    })
+    .catch(e => {
+        console.log(e)
+        res.send({
+            code: 0, 
+            error: {
+                errno: e.body.msg.errno,
+                code: e.body.msg.code,
+            }, 
+            message: e.message || e.code || e.body.message || e.body.msg.code
+        })
+    });
+})
+/** 精选歌单 */
 router.get('/highquality', (req, res) => {
     const { cat, limit, before } = req.query;
     top_playlist_highquality({
@@ -33,6 +55,7 @@ router.get('/highquality', (req, res) => {
         })
     });
 });
+/** 获取歌单内所有歌曲 */
 router.get('/track', (req, res) => {
     const { id } = req.query;
 
@@ -58,6 +81,7 @@ router.get('/track', (req, res) => {
         })
     });
 });
+/** 获取歌单信息 */
 router.get('/detail', (req, res) => {
     const { id } = req.query;
     // https://music.163.com/playlist?id=373955762

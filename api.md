@@ -439,3 +439,39 @@ get, 根据id获取网易云歌单的信息
     error?: Error
 }
 ```
+## /playlist/personalized
+get, 获取网易云每日随机推荐
+
+```
+参数：
+{
+    query: {
+        limit: number, 获取的歌单数, 默认30
+    }
+}
+```
+```
+成功返回(主要使用参数)：
+{
+    code: number(1)
+    data: [
+        {
+            id: number,
+            name: string,
+            picUrl: string,
+            playCount: number,
+            trackCount: number,
+            trackNumberUpdateTime: number
+        }
+    ]
+}
+```
+```
+失败返回：
+{
+    code: number(0)
+    message: string
+    error?: Error
+}
+```
+
