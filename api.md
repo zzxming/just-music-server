@@ -216,6 +216,36 @@ get, 根据关键字搜索网易云音乐
 }
 ```
 ## **/cloud**
+### **/login**
+post, 通过手机号和密码登录网易云账号
+
+```
+参数：
+{
+    body: {
+        phone: string
+        password: string
+    }
+}
+```
+```
+成功返回：
+{
+    code: number(200)
+    data: {
+        msg: string
+        message: string
+    }
+}
+```
+```
+失败返回：
+{
+    code: number(0)
+    message: string
+    error?: Error
+}
+```
 ### **/info**
 get, 通过网易云歌曲id获取歌曲信息
 
@@ -247,6 +277,12 @@ get, 通过网易云歌曲id获取歌曲信息
             }
         ]，
         dt: number, 歌曲时长
+        noCopyrightRcmd: {  // 这首歌在网易云音乐无法播放, 且有其他版本时
+            type: number
+            typeDesc: string
+            songId: number
+        }
+        st: number, -200 时表示歌曲下架了,没发播放
     }
 }
 ```
@@ -367,6 +403,12 @@ get, 获取网易云歌单中的所有歌曲
             id: number, 歌曲id
             name: string, 歌曲名称
             dt: number, 歌曲时长, ms单位
+            noCopyrightRcmd: {  // 这首歌在网易云音乐无法播放, 且有其他版本时
+                type: number
+                typeDesc: string
+                songId: number
+            }
+            st: number, -200 时表示歌曲下架了,没发播放
         }
     ]
 }
@@ -434,12 +476,12 @@ get, 根据id获取网易云歌单的信息
 ```
 失败返回：
 {
-    code: number(0)
+    code: number
     message: string
     error?: Error
 }
 ```
-## /playlist/personalized
+### **/playlist/personalized**
 get, 获取网易云每日随机推荐
 
 ```

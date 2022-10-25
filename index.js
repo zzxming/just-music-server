@@ -1,9 +1,13 @@
 
 const express = require("express");
 
-
 const app = express();
-app.use(express.static('./static'))
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static('./static'));
+
+
 
 app.use('/bili', require('./routers/bili').router)
 app.use('/music', require('./routers/music').router)
