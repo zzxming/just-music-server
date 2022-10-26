@@ -216,7 +216,7 @@ get, 根据关键字搜索网易云音乐
 }
 ```
 ## **/cloud**
-### **/login**
+### **/user/login**
 post, 通过手机号和密码登录网易云账号
 
 ```
@@ -235,6 +235,60 @@ post, 通过手机号和密码登录网易云账号
     data: {
         msg: string
         message: string
+    }
+}
+```
+```
+失败返回：
+{
+    code: number(0)
+    message: string
+    error?: Error
+}
+```
+### **/user/status**
+get, 获取用户登录状态
+
+```
+参数：
+{
+    
+}
+```
+```
+成功返回：
+{
+    code: number(200)
+    data: {
+        code: number,
+        account: {} | null, 对象中是用户信息, 用不上所以这里不写了
+        profile: {} | null, 对象中是用户信息, 用不上所以这里不写了
+    }
+}
+```
+```
+失败返回：
+{
+    code: number(0)
+    message: string
+    error?: Error
+}
+```
+### **/user/logout**
+get, 退出登录状态
+
+```
+参数：
+{
+    
+}
+```
+```
+成功返回：
+{
+    code: number(200)
+    data: {
+        code: number,
     }
 }
 ```

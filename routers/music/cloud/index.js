@@ -2,35 +2,10 @@ const { createRequest, song_url, song_detail, login_cellphone } = require("Netea
 const router =  require("express").Router();
 
 router.use('/playlist', require('./playlist').router);
+router.use('/user', require('./user').router);
 
 
 
-
-router.post('/login', (req, res) => {
-    const { phone, password } = req.body;
-
-    login_cellphone({ phone, password })
-    .then(response => {
-        console.log(response)
-        res.setHeader('set-cookie', response.cookie)
-        res.send({
-            code: response.status,
-            data: response.body
-        });
-    })
-    .catch(e => {
-        console.log(e, 'error')
-        res.send({
-            code: 0, 
-            error: {
-                errno: e.body?.msg?.errno,
-                code: e.body?.msg?.code,
-            }, 
-            e,
-            message: e.message || e.code || e.body.message || e.body.msg.code
-        })
-    })
-})
 router.get('/info', (req, res) => {
     const { ids } = req.query;
     // https://music.163.com/song?id=569105662
