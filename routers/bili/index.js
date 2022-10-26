@@ -137,7 +137,13 @@ async function getBiliVideoInitialState(bvid) {
             })
         })
         .catch(err => {
-            console.log('get bili video error', err)
+            console.log('get bili video error', {
+                code: err.code,
+                response: {
+                    status: err.response.status,
+                    statusText: err.response.statusText,
+                },
+            })
             reject({code: 0, message: '视频没找到'})
         });
     })
