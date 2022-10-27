@@ -247,7 +247,7 @@ post, 通过手机号和密码登录网易云账号
 }
 ```
 ### **/user/status**
-get, 获取用户登录状态
+post, 获取用户登录状态
 
 ```
 参数：
@@ -275,7 +275,7 @@ get, 获取用户登录状态
 }
 ```
 ### **/user/logout**
-get, 退出登录状态
+post, 退出登录状态
 
 ```
 参数：
@@ -287,16 +287,36 @@ get, 退出登录状态
 成功返回：
 {
     code: number(200)
-    data: {
-        code: number,
-    }
 }
 ```
 ```
 失败返回：
 {
-    code: number(0)
-    message: string
+    code: number(400)
+    message?: string
+    error?: Error
+}
+```
+### **/user/refresh**
+post, 刷新登录状态
+
+```
+参数：
+{
+    
+}
+```
+```
+成功返回：
+{
+    code: number(200)
+}
+```
+```
+失败返回：
+{
+    code: number(400)
+    message?: string
     error?: Error
 }
 ```
