@@ -5,6 +5,7 @@ const { dbQuery } = require('../../../tools');
 
 router.get('/local', async (req, res) => {
     let { kw: keywords, t: type, limit, offset } = req.query;
+    if (!type) type = 1;
     if (!offset) offset = 10;
     if (!limit) limit = 1;
     dbQuery(`

@@ -5,9 +5,7 @@ const path = require("path");
 const { dbQuery } = require("../../tools");
 const { staticMusic, getAudioFromDir, musicPath } = require("../music");
 const router = require("express").Router();
-
-const biliAudioPathAbsolute = 'D:/cloud_music/bili_audio';
-const biliAudioPathRelative = 'bili_audio';
+const { biliAudioPathAbsolute, biliAudioPathRelative } = require("../../config");
 
 /** 获取 bili 音频数据 */
 router.get('/info', async (req, res) => {

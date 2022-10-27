@@ -1,4 +1,4 @@
-const { createRequest, song_url, song_detail, login_cellphone } = require("NeteaseCloudMusicApi");
+const { createRequest, song_url, song_detail } = require("NeteaseCloudMusicApi");
 const router =  require("express").Router();
 
 router.use('/playlist', require('./playlist').router);

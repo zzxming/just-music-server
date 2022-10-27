@@ -1,4 +1,4 @@
-const { login_cellphone, login_status, login_refresh, createRequest, logout } = require("NeteaseCloudMusicApi");
+const { login_cellphone, login_status, login_refresh, logout } = require("NeteaseCloudMusicApi");
 
 const router =  require("express").Router();
 

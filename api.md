@@ -1,39 +1,38 @@
-# **/bili**
-## **/audio** 
-get, 根据哔哩哔哩 bv 号获取音频
+# **哔哩哔哩相关接口**
+## **获取哔哩哔哩音频** 
 
+说明：调用此接口可以根据 bv 号获取到哔哩哔哩视频的音频数据，并保存至路径对应位置
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/bili/audio</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bv</font>
+
+**成功返回：** 音频数据流
+
+**失败返回：**
 ```
-参数：
-{
-    query: {
-        bv: string
-    }
-}
-```
-```
-成功返回：音频数据流
-```
-```
-失败返回：
 {
     code: number(0)
     message: string
     error: Error
 }
 ```
-## **/info** 
-get, 根据哔哩哔哩 bv 号获取音频信息
 
+<br>
+
+## **获取哔哩哔哩音频信息** 
+说明：根据哔哩哔哩 bv 号获取音频信息，格式类似本地音频信息格式
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/bili/info</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bv</font>
+
+**成功返回：**
 ```
-参数：
-{
-    query: {
-        bv: string
-    }
-}
-```
-```
-成功返回：
 {
     code: number(1)
     data: {
@@ -53,8 +52,8 @@ get, 根据哔哩哔哩 bv 号获取音频信息
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
@@ -62,43 +61,46 @@ get, 根据哔哩哔哩 bv 号获取音频信息
 }
 ```
 
+<br>
+<br>
 
-# **/music**
-## **/:id**
-get, 根据本地数据库 music_id 获取音频
 
+# **音乐相关接口**
+## **获取本地音频** 
+说明：根据本地数据库的 id 获取音频
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/:id</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回：** 音频数据流
+
+**失败返回：**
 ```
-参数：
-{
-    params: {
-        id: string
-    }
-}
-```
-```
-成功返回：音频数据流
-```
-```
-失败返回：
 {
     code: number(0)
     message: string
-    error?: Error
+    error: Error
 }
 ```
-## **/info**
-get, 根据本地数据库 music_id 获取音频相关信息
 
+<br>
+
+
+## **获取本地音频信息**
+
+说明：根据本地数据库的 id 获取音频相关信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/info</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回：**
 ```
-参数：
-{
-    query: {
-        id: string
-    }
-}
-```
-```
-成功返回：
 {
     code: number(1)
     data: {
@@ -117,30 +119,36 @@ get, 根据本地数据库 music_id 获取音频相关信息
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-## **/search/local**
-get, 根据关键字搜索本地数据库
 
+<br>
+
+## **搜索本地数据库**
+说明：根据关键字搜索本地数据库
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/search/local</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">kw</font>
+
+**可选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">type</font>：搜索类型，默认 1，歌曲搜索
+
+<font style="background: #f8f8f8; color: #e96900;">limit</font>：页数，默认1
+
+<font style="background: #f8f8f8; color: #e96900;">offset</font>：一页的数据量，默认10
+
+**成功返回：**
 ```
-参数：
-{
-    query: {
-        kw: string, 关键字
-        t: number, 同网易云音乐搜索 api 的 type, 默认1
-        limit: number, 页数, 默认1
-        offset: number, 一次返回数据的个数, 默认10
-    }
-}
-```
-```
-成功返回：
 {
     code: number(1)
     data: [
@@ -161,29 +169,35 @@ get, 根据关键字搜索本地数据库
     ]
 }
 ```
+
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-## **/search/cloud**
-get, 根据关键字搜索网易云音乐
 
+<br>
+
+## **搜索网易云音乐**
+说明：根据关键字搜索网易云音乐
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/search/cloud</font>
+
+**调用方式：** GET
+
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">kw</font>
+
+**可选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">t</font>：搜索类型，默认 1，歌曲搜索
+
+<font style="background: #f8f8f8; color: #e96900;">limit</font>：页数，默认 1
+
+**成功返回(主要使用参数)：**
 ```
-参数：
-{
-    query: {
-        kw: string, 关键字
-        t: number, 同网易云音乐搜索 api 的 type
-        limit: number, 页数
-    }
-}
-```
-```
-成功返回(主要使用参数)：
 {
     code: number(1)
     data: [
@@ -207,29 +221,33 @@ get, 根据关键字搜索网易云音乐
     count: number
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-## **/cloud**
-### **/user/login**
-post, 通过手机号和密码登录网易云账号
 
+<br> 
+
+
+## **网易云用户登录**
+说明：通过手机号和密码登录网易云账号
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/login</font>
+
+**调用方式：** POST
+
+**必选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">phone</font>：手机号
+
+<font style="background: #f8f8f8; color: #e96900;">password</font>：密码
+
+**成功返回：**
 ```
-参数：
-{
-    body: {
-        phone: string
-        password: string
-    }
-}
-```
-```
-成功返回：
 {
     code: number(200)
     data: {
@@ -238,25 +256,26 @@ post, 通过手机号和密码登录网易云账号
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/user/status**
-post, 获取用户登录状态
 
+<br>
+
+## **获取网易云用户登录状态**
+说明：通过登录后的 cookie 获取网易云用户登录状态
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/status</font>
+
+**调用方式：** POST
+
+**成功返回：**
 ```
-参数：
-{
-    
-}
-```
-```
-成功返回：
 {
     code: number(200)
     data: {
@@ -266,73 +285,76 @@ post, 获取用户登录状态
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/user/logout**
-post, 退出登录状态
 
+<br>
+
+## **退出网易云用户登录**
+说明：退出网易云用户登录状态
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/logout</font>
+
+**调用方式：** POST
+
+**成功返回：**
 ```
-参数：
-{
-    
-}
-```
-```
-成功返回：
 {
     code: number(200)
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(400)
     message?: string
     error?: Error
 }
 ```
-### **/user/refresh**
-post, 刷新登录状态
 
+<br>
+
+## **刷新网易云用户登录状态**
+说明：刷新登录状态
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/refresh</font>
+
+**调用方式：** POST
+
+**成功返回：**
 ```
-参数：
-{
-    
-}
-```
-```
-成功返回：
 {
     code: number(200)
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(400)
     message?: string
     error?: Error
 }
 ```
-### **/info**
-get, 通过网易云歌曲id获取歌曲信息
 
+<br> 
+
+## **获取网易云歌曲信息**
+说明：通过网易云歌曲 id 获取歌曲信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/info</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">ids</font>：id 的字符串，使用<font style="background: #f8f8f8; color: #e96900;"> , </font>链接可以一次查询多个
+
+**成功返回：**
 ```
-参数：
-{
-    query: {
-        ids: string, 歌曲id字符串, 可通过逗号连接一次查询多个
-    }
-}
-```
-```
-成功返回：
 {
     code: number(1)
     data: {
@@ -360,55 +382,62 @@ get, 通过网易云歌曲id获取歌曲信息
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/:id**
-get, 通过网易云歌曲id获取歌曲播放路径
 
+<br>
+
+
+## **获取网易云歌曲播放路径**
+说明：通过网易云歌曲 id 获取歌曲播放路径
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/info/:id</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回：**
 ```
-参数：
-{
-    params: {
-        id: number
-    }
-}
-```
-```
-成功返回：
 {
     code: number(1)
     src: string, 歌曲播放路径
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/playlist/highquality**
-get, 网易云精选歌单
 
+<br>
+
+## **获取网易云精选歌单**
+说明：通过网易云精选歌单信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/highquality</font>
+
+**调用方式：** GET
+
+**可选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">cat</font>：歌单类型，可选值有（全部， 华语， 欧美， 韩语， 日语， 粤语， 小语种， 运动， ACG， 影视原声， 流行， 摇滚， 后摇， 古风， 民谣， 轻音乐， 电子， 器乐， 说唱， 古典， 爵士）
+
+<font style="background: #f8f8f8; color: #e96900;">limit</font>：返回歌单数
+
+<font style="background: #f8f8f8; color: #e96900;">before</font>：上次获取结果中的 lasttime，用于翻页时获取数据
+
+**成功返回(主要使用参数)：**
 ```
-参数：
-{
-    query: {
-        cat: string(全部 | 华语 | 欧美 | 韩语 | 日语 | 粤语 | 小语种 | 运动 | ACG | 影视原声 | 流行 | 摇滚 | 后摇 | 古风 | 民谣 | 轻音乐 | 电子 | 器乐 | 说唱 | 古典 | 爵士)
-        limit: number, 返回歌单数
-        before: number, 用于翻页, 上次获取结果中的lasttime, 即最后一个歌单的 updatetime
-    }
-}
-```
-```
-成功返回(主要使用参数)：
 {
     code: number(1)
     data: {
@@ -436,29 +465,29 @@ get, 网易云精选歌单
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/playlist/track**
-get, 获取网易云歌单中的所有歌曲
 
+<br>
+
+
+## **获取网易云音乐歌单中的所有歌曲**
+说明：获取网易云音乐的歌单中所有歌曲信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/track</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回(主要使用参数)：**
 ```
-参数：
-{
-    query: {
-        id: number, 歌单id
-        offset: number, 页数
-        limit: number, 返回的个数
-    }
-}
-```
-```
-成功返回(主要使用参数)：
 {
     code: number(1)
     data: [
@@ -487,27 +516,29 @@ get, 获取网易云歌单中的所有歌曲
     ]
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
     error?: Error
 }
 ```
-### **/playlist/detail**
-get, 根据id获取网易云歌单的信息
 
+<br>
+
+
+## **获取网易云歌单详细信息**
+说明：根据id获取网易云歌单的信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/detail</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回(主要使用参数)：**
 ```
-参数：
-{
-    query: {
-        id: number, 歌单id
-    }
-}
-```
-```
-成功返回(主要使用参数)：
 {
     code: number(1)
     data: {
@@ -547,27 +578,29 @@ get, 根据id获取网易云歌单的信息
     }
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number
     message: string
     error?: Error
 }
 ```
-### **/playlist/personalized**
-get, 获取网易云每日随机推荐
 
+<br>
+
+
+## **获取网易云每日随机推荐**
+说明：获取网易云每日随机推荐
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/personalized</font>
+
+**调用方式：** GET
+
+**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：获取的歌单数, 默认30
+
+**成功返回(主要使用参数)：**
 ```
-参数：
-{
-    query: {
-        limit: number, 获取的歌单数, 默认30
-    }
-}
-```
-```
-成功返回(主要使用参数)：
 {
     code: number(1)
     data: [
@@ -582,8 +615,8 @@ get, 获取网易云每日随机推荐
     ]
 }
 ```
+**失败返回：**
 ```
-失败返回：
 {
     code: number(0)
     message: string
