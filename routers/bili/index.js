@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const path = require("path");
 const { dbQuery } = require("../../tools");
-const { staticMusic, getAudioFromDir, musicPath } = require("../music");
+const { staticMusic, getAudioFromDir, musicPath } = require("../music/local");
 const router = require("express").Router();
 const { biliAudioPathAbsolute, biliAudioPathRelative } = require("../../config");
 
@@ -48,19 +48,22 @@ router.get('/audio', async (req, res) => {
     .catch(e => {
         console.log(e)
         res.status(404).send(e);
+        return;
     })
 
-    await getAudio(initialState, req, res)
-    .catch(e => {
-        res.status(500).send({
-            code: 0, 
-            error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
-            }, 
-            message: e.message || e.code || e.body.message || e.body.msg.code
-        })
-    });
+    if (initialState) {
+        await getAudio(initialState, req, res)
+        .catch(e => {
+            res.status(500).send({
+                code: 0, 
+                error: {
+                    errno: e.message ?? e.body.msg ?? undefined,
+                }, 
+                message: e.message || e.code || e.body.message || e.body.msg.code
+            })
+        });
+    }
+    
 });
 /** 无 reference 获取 bili 资源文件 */
 // router.get('/static', (req, res) => {
@@ -83,7 +86,7 @@ async function getBiliVideoInitialState(bvid) {
         .then(async data => {
             let initialState = parseHTMLGetInitalState(data.data);
             if (!initialState) {
-                res.send({code: 0, message: '视频state未找到'})
+                reject({code: 0, message: '视频state未找到'})
                 return;
             }
             let bvid, cid, title, staff, cover;
@@ -137,10 +140,7 @@ async function getBiliVideoInitialState(bvid) {
         .catch(err => {
             console.log('get bili video error', {
                 code: err.code,
-                response: {
-                    status: err.response.status,
-                    statusText: err.response.statusText,
-                },
+                response: err
             })
             reject({code: 0, message: '视频没找到'})
         });
@@ -245,7 +245,7 @@ async function saveAudio(path, { title, singers, cover, duration }) {
     }
     // console.log(path, title, singer)
     // 歌手保存并返回id
-    let singersId = await Promise.all(singers.map(async (singer_name) => {
+    let singersId = await Promise.all(singers.map(async ({name: singer_name}) => {
         let singerData = await dbQuery(`select * from singer where singer_name = '${singer_name}'`)
         if (singerData.length > 0) {
             return {

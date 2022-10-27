@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2022-10-20 16:12:08
+Date: 2022-10-27 18:53:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,8 +28,9 @@ CREATE TABLE `music` (
   `album` varchar(255) NOT NULL DEFAULT '',
   `duration` int(11) NOT NULL,
   PRIMARY KEY (`music_id`),
+  UNIQUE KEY `music_id` (`music_id`),
   KEY `singer_id` (`singer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of music
@@ -89,6 +90,51 @@ INSERT INTO `music` VALUES ('52', '游园会', '32', '游园会.mp3', '', '游�
 INSERT INTO `music` VALUES ('53', '夜宴风波', '54', '夜宴风波.mp3', '', '夜宴风波', '255000');
 INSERT INTO `music` VALUES ('54', '星之回响【2020拜年祭单品】', '63,54,65,66,67,68,69,64', 'bili_audio/BV1KJ411C7qF.mp3', 'http://i2.hdslb.com/bfs/archive/c39ad6fbe8ce79d4e0ff9b1dc76b02c37aa14907.jpg', '星之回响【2020拜年祭单品】', '300000');
 INSERT INTO `music` VALUES ('55', '【原神生日会】如果突然想起我', '70', 'bili_audio/BV1tG4y1B7xU.mp3', 'http://i1.hdslb.com/bfs/archive/262b48d3314562522d7698c9d089f8f10000f725.jpg', '【原神生日会】如果突然想起我', '231000');
+INSERT INTO `music` VALUES ('56', '另一个我【2022拜年纪单品】', '70,75,74', 'bili_audio/BV1WR4y1j7Ar.mp3', 'http://i1.hdslb.com/bfs/archive/2895edff4ab99115f7ccc0b6861c43a6f23fb49e.jpg', '另一个我【2022拜年纪单品】', '200179');
+
+-- ----------------------------
+-- Table structure for playlist
+-- ----------------------------
+
+-- 这里的creator_id默认是1, 因为不打算有创建用户, 所以设置默认
+DROP TABLE IF EXISTS `playlist`;
+CREATE TABLE `playlist` (
+  `playlist_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '歌单id',
+  `playlist_title` varchar(255) NOT NULL DEFAULT '歌单名称' COMMENT '歌单名称',
+  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '歌单简介',
+  `cover` varchar(255) NOT NULL DEFAULT '/img/music.jpg' COMMENT '歌单封面',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `public` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否公开，1公开，0不公开',
+  `creator_id` int(11) NOT NULL DEFAULT '1' COMMENT '创建者id',
+  PRIMARY KEY (`playlist_id`),
+  UNIQUE KEY `playlist_id` (`playlist_id`),
+  KEY `creator_id` (`creator_id`),
+  CONSTRAINT `playlist_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of playlist
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for playlist_map
+-- ----------------------------
+DROP TABLE IF EXISTS `playlist_map`;
+CREATE TABLE `playlist_map` (
+  `playlist_map_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `playlist_id` int(11) NOT NULL COMMENT '歌单id',
+  `music_id` int(11) NOT NULL COMMENT '歌曲id',
+  `music_type` enum('cloud','local') NOT NULL DEFAULT 'local' COMMENT '歌曲类型',
+  UNIQUE KEY `playlist_map_id` (`playlist_map_id`),
+  KEY `playlist_id` (`playlist_id`),
+  KEY `music_id` (`music_id`),
+  CONSTRAINT `playlist_map_ibfk_1` FOREIGN KEY (`playlist_id`) REFERENCES `playlist` (`playlist_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of playlist_map
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for singer
@@ -97,8 +143,9 @@ DROP TABLE IF EXISTS `singer`;
 CREATE TABLE `singer` (
   `singer_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `singer_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`singer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`singer_id`),
+  UNIQUE KEY `singer_id` (`singer_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of singer
@@ -173,6 +220,8 @@ INSERT INTO `singer` VALUES ('67', '神楽Mea_NHOTBOT');
 INSERT INTO `singer` VALUES ('68', '物述有栖Official');
 INSERT INTO `singer` VALUES ('69', '白上吹雪Official');
 INSERT INTO `singer` VALUES ('70', 'YuH_ChiliChill');
+INSERT INTO `singer` VALUES ('71', '西瓜Kune');
+INSERT INTO `singer` VALUES ('72', 'cu夏_ChiliChill');
 
 -- ----------------------------
 -- Table structure for singer_map
@@ -183,9 +232,10 @@ CREATE TABLE `singer_map` (
   `singer_id` int(11) NOT NULL COMMENT '歌手id',
   `singer_name` varchar(255) NOT NULL COMMENT '歌手名称',
   PRIMARY KEY (`singer_map_id`),
+  UNIQUE KEY `singer_map_id` (`singer_map_id`),
   KEY `singer_id` (`singer_id`),
   CONSTRAINT `singer_map_ibfk_1` FOREIGN KEY (`singer_id`) REFERENCES `singer` (`singer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of singer_map
@@ -301,3 +351,33 @@ INSERT INTO `singer_map` VALUES ('112', '66', '花丸晴琉Official');
 INSERT INTO `singer_map` VALUES ('113', '65', '鹿乃ちゃん');
 INSERT INTO `singer_map` VALUES ('114', '64', '夏色祭Official');
 INSERT INTO `singer_map` VALUES ('115', '70', 'YuH_ChiliChill');
+INSERT INTO `singer_map` VALUES ('116', '72', 'cu夏_ChiliChill');
+INSERT INTO `singer_map` VALUES ('127', '71', '西瓜Kune');
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `user_name` varchar(16) NOT NULL DEFAULT '' COMMENT '用户名',
+  `avatar` varchar(255) NOT NULL DEFAULT '/img/music.jpg' COMMENT '用户头像',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+
+-- 触发器, 当添加用户时, 用户名为空字符串的将会自动生成名称
+INSERT INTO `user` VALUES ('1', 'just用户', '/img/music.jpg');
+DROP TRIGGER IF EXISTS `default_user_name`;
+DELIMITER ;;
+CREATE TRIGGER `default_user_name` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
+	if(LENGTH(trim(new.user_name))<1) then 
+		set new.user_name=concat("用户",LPAD(FLOOR(RAND()*999999),6,0));
+	end IF;
+END
+;;
+DELIMITER ;

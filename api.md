@@ -624,3 +624,58 @@
 }
 ```
 
+<br>
+
+
+## **创建本地歌单**
+说明：创建本地歌单
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/create</font>
+
+**调用方式：** POST
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">title</font>：歌单标题
+
+**可选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">description</font>：歌单简介
+
+<font style="background: #f8f8f8; color: #e96900;">cover</font>：歌单封面
+
+<font style="background: #f8f8f8; color: #e96900;">songs</font>：歌曲信息数组，至少包含歌曲 id 和歌曲类型 type（cloud 或 local）
+
+<font style="background: #f8f8f8; color: #e96900;">creator_id</font>：创建者 id
+
+**成功返回：**
+```
+{
+    code: number
+    message: string
+}
+```
+**失败返回：**
+```
+{
+    code: number
+    message: string
+}
+```
+
+<br>
+
+
+## **获取本地歌单信息**
+说明：根据 id 获取本地歌单信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/info</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回(主要使用参数)：**
+
+
+<br>
+
+

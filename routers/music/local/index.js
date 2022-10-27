@@ -6,6 +6,8 @@ const router =  require("express").Router();
 const { musicPath } = require("../../../config");
 
 
+router.use('/playlist', require('./playlist').router);
+
 router.get('/info', async (req, res) => {
     const { id } = req.query;
     let result = await dbQuery(`select * from music where music_id = '${id}'`).
@@ -159,8 +161,8 @@ async function staticMusic(staticPath, req, res) {
         res.status(500).send({
             code: 0, 
             error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
+                errno: e.errno || e.body.msg.errno,
+                code: e.code || e.body.msg.code,
             }, 
             message: e.message || e.code || e.body.message || e.body.msg.code
         })

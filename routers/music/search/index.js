@@ -45,11 +45,8 @@ router.get('/local', async (req, res) => {
         console.log(e)
         res.send({
             code: 0, 
-            error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
-            }, 
-            message: e.message || e.code || e.body.message || e.body.msg.code
+            error: e,
+            message: e.message
         })
     })
 });
