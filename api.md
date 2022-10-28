@@ -115,7 +115,8 @@
                 singer_id: number
                 singer_name: string
             }
-        ]
+        ],
+        fee: number
     }
 }
 ```
@@ -164,7 +165,8 @@
                     singer_id: number
                     singer_name: string
                 }
-            ]
+            ],
+            fee: number
         }
     ]
 }
@@ -667,15 +669,145 @@
 ## **获取本地歌单信息**
 说明：根据 id 获取本地歌单信息
 
-**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/info</font>
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/detail</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回：**
+```
+{
+    type: string(local),
+    playlist_id: number,
+    playlist_title: string,
+    id: number,
+    title: string,
+    description: string,
+    cover: string,
+    createTime: number,
+    updateTime: number,
+    public: number,
+    playCount: number,
+    creator: {
+        userId: number,
+        name: string,
+        avatarUrl: string
+    }
+
+}
+```
+
+**失败返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+<br>
+
+## **获取本地歌单内所有歌曲信息**
+说明：根据 id 获取本地歌单内所有歌曲信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/track</font>
 
 **调用方式：** GET
 
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回(主要使用参数)：**
+```
+[
+    {
+        type: string(local),
+        music_id: number,
+        music_name: string,
+        singer_id: number,
+        music_url: string,
+        music_cover: string,
+        album: string,
+        duration: number,
+        fee: number,
+        public: number
+        singers: {
+            singer_id: number,
+            singer_name: string
+        }
+    } | {
+        type: string(cloud),
+        id: number, 歌曲id
+        name: string, 歌曲名称
+        al: {   // 专辑信息
+            id: number
+            name: string
+            picUrl: string, 专辑封面图片路径
+        },
+        ar: [   // 歌手信息
+            {
+                id: number
+                name: string
+            }
+        ],
+        dt: number, 歌曲时长, ms单位
+        noCopyrightRcmd: {  // 这首歌在网易云音乐无法播放, 且有其他版本时
+            type: number
+            typeDesc: string
+            songId: number
+        }
+        st: number, -200 时表示歌曲下架了,没发播放
+    }
+]
+```
 
+**失败返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
 
 <br>
 
+## **随机获取本地歌单**
+说明：随机获取本地歌单信息
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/track</font>
+
+**调用方式：** GET
+
+**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：默认10
+
+**成功返回：**
+```
+[
+    {
+        id: number,
+        title: string,
+        description: string,
+        cover: string,
+        createTime: number,
+        updateTime: number,
+        public: number,
+        playCount: number,
+        creator: {
+            userId: number,
+            name: string,
+            avatarUrl: string
+        },
+    }
+]
+```
+
+**失败返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+<br>
 

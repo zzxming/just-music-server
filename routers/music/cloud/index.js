@@ -1,5 +1,6 @@
-const { createRequest, song_url, song_detail } = require("NeteaseCloudMusicApi");
+const { createRequest, song_url } = require("NeteaseCloudMusicApi");
 const router =  require("express").Router();
+const { getCloudMusicInfoWithId } = require('./utils');
 
 router.use('/playlist', require('./playlist').router);
 router.use('/user', require('./user').router);
@@ -13,24 +14,15 @@ router.get('/info', (req, res) => {
         res.send({code: 0, message: '参数错误'})
         return;
     }
-    song_detail({ids})
+    getCloudMusicInfoWithId(ids)
     .then(response => {
-        // console.log(response)
-        if (response.body.songs) {
-            res.send({code: 1, data: {...response.body.songs[0], st: response.body.privileges[0].st}});
-            return;
-        }
-        res.send({code: 0, message: '参数错误'});
+        res.send({code: 1, data: response});
     })
     .catch(e => {
         console.log(e)
         res.send({
             code: 0, 
-            error: {
-                errno: e.body.msg.errno,
-                code: e.body.msg.code,
-            }, 
-            message: e.message || e.code || e.body.message || e.body.msg.code
+            message: e
         })
     })
 });
@@ -64,5 +56,6 @@ router.get('/:id', (req, res) => {
 
 
 module.exports = {
-    router
+    router,
+    getCloudMusicInfoWithId
 }
