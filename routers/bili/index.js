@@ -32,11 +32,11 @@ router.get('/audio', async (req, res) => {
         res.status(401).send({code: 0, message: '参数bv缺失'})
         return;
     }
-    // 本地已有, res 发送音频文件
-    if ((await getAudioFromDir(musicPath)).includes(`${bv}.mp3`)) {
-        await staticMusic(biliAudioPathRelative + `/${bv}.mp3`, req, res);
-        return;
-    }
+    // // 本地已有, res 发送音频文件
+    // if ((await getAudioFromDir(musicPath)).includes(`${bv}.mp3`)) {
+    //     await staticMusic(biliAudioPathRelative + `/${bv}.mp3`, req, res);
+    //     return;
+    // }
 
 // BV1tG4y1B7xU, 合集类
 

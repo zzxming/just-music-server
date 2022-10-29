@@ -784,6 +784,7 @@
 ```
 [
     {
+        type: string('local')
         id: number,
         title: string,
         description: string,
@@ -811,3 +812,67 @@
 
 <br>
 
+## **本地歌单播放数增加**
+说明：增加本地歌单的播放数
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/countadd</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**成功返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+**失败返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+<br>
+
+## **更新本地歌单信息**
+说明：增加本地歌单的播放数
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/update</font>
+
+**调用方式：** POST
+
+**必填参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">id</font>
+
+<font style="background: #f8f8f8; color: #e96900;">title</font>：更新后歌单标题
+
+<font style="background: #f8f8f8; color: #e96900;">description</font>：更新后歌单简介
+
+<font style="background: #f8f8f8; color: #e96900;">cover</font>：更新后歌单封面
+
+<font style="background: #f8f8f8; color: #e96900;">public</font>：更新后歌单是否公开
+
+
+**成功返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+**失败返回：**
+```
+{
+    code: number,
+    message: string
+}
+```
+
+<br>

@@ -49,15 +49,14 @@ router.post('/status', (req, res) => {
         });
     })
     .catch(e => {
-        console.log(e, 'error')
+        console.log(e, '/cloud/user/status')
         res.send({
             code: 0, 
             error: {
                 errno: e.body?.msg?.errno,
                 code: e.body?.msg?.code,
             }, 
-            e,
-            message: e.message || e.code || e.body.message || e.body.msg || ''
+            message: e.message || e.code || e.body.message || e.body.status || ''
         })
     })
 });

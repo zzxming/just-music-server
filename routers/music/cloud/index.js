@@ -22,7 +22,8 @@ router.get('/info', (req, res) => {
         console.log(e)
         res.send({
             code: 0, 
-            message: e
+            status: e.status,
+            message: e.msg?.code
         })
     })
 });
@@ -57,5 +58,4 @@ router.get('/:id', (req, res) => {
 
 module.exports = {
     router,
-    getCloudMusicInfoWithId
 }

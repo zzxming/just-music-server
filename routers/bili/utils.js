@@ -130,31 +130,56 @@ function getVideoCover(bvid) {
  */
 async function getAudio({src, bvid, title, singers, cover, duration}, req, res) {
     // console.log(bvid)
+    let range = req.headers.range
+    if (!range) {
+        range = 'bytes=0';
+    }
+    let headerRange = range.split('bytes=')[1];
+    let [startRange, endRange] = headerRange.split('-').map(Number);
+    let chunksize = 1024*512;
     return new Promise(async (resolve, reject) => {
         await axios.get(src, {
             headers: {
-                // cookie: "_uuid=54E7E79E-E228-C46F-1548-95BF96DE8EC414097infoc; buvid3=F80E042E-7EE0-D0E7-6EE1-E54392E1736214090infoc; b_nut=1662371114; buvid_fp_plain=undefined; hit-dyn-v2=1; LIVE_BUVID=AUTO4016623711373480; CURRENT_BLACKGAP=0; rpdid=|(YYR)R|muu0J'uYYkJ~umul; nostalgia_conf=-1; i-wanna-go-back=-1; b_ut=5; CURRENT_QUALITY=64; DedeUserID=12640044; DedeUserID__ckMd5=9923fd290277cb2b; buvid4=E8641656-28DE-3530-ED92-211189CE28EB83733-022072420-o%2FFdW6FI6sz7iaOIokl5SQ%3D%3D; fingerprint3=2418f49739abe6d422ee904f4112b407; fingerprint=ffce548d57a0467b98df1783ced52cb5; PVID=1; buvid_fp=ffce548d57a0467b98df1783ced52cb5; bp_video_offset_12640044=714153529921503400; SESSDATA=9bb5b22b%2C1680921476%2Ca1729%2Aa1; bili_jct=6cb7ccbc486662d4442dbc7f2a704951; sid=6p6641o3; b_lsid=7D324F73_183C175DE1E; CURRENT_FNVAL=4048",
                 referer: `https://www.bilibili.com/video/${bvid}`,
+                range: `bytes=${startRange}-${startRange + chunksize}`
             },
             responseType: 'stream'
         })
         .then(data => {
-            // 创建写入流写入本地
-            let writeStream = fs.createWriteStream(path.resolve(biliAudioPathAbsolute, `${bvid}.mp3`), { encoding: "binary" })
-            data.data.pipe(writeStream);
-            data.data.on('close', async () => {
-                writeStream.close();
-                // 保存至数据库并返回对应的music_id
-                let music_id = await saveAudio(biliAudioPathRelative + `/${bvid}.mp3`, { title, singers, cover, duration })
-                if (!music_id) {
-                    res.status(500).send({code: 0, message: '数据保存出现错误'})
-                    return;
-                }
-                await staticMusic(music_id, req, res);
-                console.log(`The file name ${bvid} has been saved!`);
-                resolve({code: 1});
+            // console.dir(data)
+            let totalRange = data.headers['content-range'].split('/')[1];
+            res.set({
+                'Content-Length': chunksize + 1,
+                'Content-Type': 'video/mp4',
+                "Accept-Ranges": "bytes",
+                'Content-Range': `bytes ${startRange}-${startRange + chunksize}/${totalRange}`,
             })
+            res.status(206);
 
+            let result = Buffer.from([]);
+            data.data.on('data', (chunk) => {
+                result = Buffer.concat([result, chunk])
+            });
+            data.data.on('end', () => {
+                res.end(result)
+            });
+
+            // 保存文件到本地写法
+            // 创建写入流写入本地
+            // let writeStream = fs.createWriteStream(path.resolve(biliAudioPathAbsolute, `${bvid}.mp3`), { encoding: "binary" })
+            // data.data.pipe(writeStream);
+            // data.data.on('close', async () => {
+            //     writeStream.close();
+            //     // 保存至数据库并返回对应的music_id
+            //     let music_id = await saveAudio(biliAudioPathRelative + `/${bvid}.mp3`, { title, singers, cover, duration })
+            //     if (!music_id) {
+            //         res.status(500).send({code: 0, message: '数据保存出现错误'})
+            //         return;
+            //     }
+            //     await staticMusic(music_id, req, res);
+            //     console.log(`The file name ${bvid} has been saved!`);
+            //     resolve({code: 1});
+            // })
         })
         .catch(e => {
             console.log(e);
