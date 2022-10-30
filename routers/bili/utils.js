@@ -1,12 +1,7 @@
 
 const axios = require("axios");
 const cheerio = require("cheerio");
-const fs = require("fs");
-const path = require("path");
 const { dbQuery } = require("../../tools");
-const { staticMusic } = require("../music/local/utils");
-const { biliAudioPathAbsolute, biliAudioPathRelative } = require("../../config");
-
 
 /** 根据 bvid 获取音频信息 */
 async function getBiliVideoInitialState(bvid) {
@@ -15,10 +10,11 @@ async function getBiliVideoInitialState(bvid) {
         .then(async data => {
             let initialState = parseHTMLGetInitalState(data.data);
             if (!initialState) {
-                reject({code: 0, message: '视频state未找到'})
+                reject('视频state未找到')
                 return;
             }
-            let bvid, cid, title, staff, cover;
+            
+            let bvid, cid, title, staff, cover, pages;
             if (initialState.videoData) {
                 bvid = initialState.videoData.bvid;
                 cid = initialState.videoData.cid;
@@ -26,6 +22,7 @@ async function getBiliVideoInitialState(bvid) {
                 // 联合投稿有 videoData.staff, 个人投稿只有 upData
                 staff = initialState.videoData.staff || [initialState.upData];
                 cover = initialState.videoData.pic;
+                pages = initialState.videoData.pages;
             }
             else {
                 bvid = initialState.videoInfo.bvid;
@@ -37,6 +34,7 @@ async function getBiliVideoInitialState(bvid) {
                     console.log(`视频${bvid}封面未找到`);
                     cover = '';
                 }
+                pages = initialState.videoInfo.pages;
             }
             // console.log(bvid, cid)
             let singers = [];
@@ -55,23 +53,52 @@ async function getBiliVideoInitialState(bvid) {
             // console.log(singer)
             let playinfo = await getPlayinfo(bvid, cid);
             if (!playinfo) {
-                res.status(404).send({code: 0, message: '视频没找到'});
+                reject('视频没找到');
                 return;
             }
             // res.send(playinfo)
     
-            let src = playinfo.dash.audio[0].baseUrl;
+            // let src = playinfo.dash.audio[0].baseUrl;
             let duration = playinfo.timelength;
-            resolve({
-                bvid, cid, title, singers, cover, src, duration, album: title
-            })
+            let main = {
+                type: 'bili', bvid, cid, title, singers, cover, duration, album: title,
+                // src
+            }
+
+            let datas = await Promise.all(pages.slice(1).map(async info => {
+                let playinfo = await getPlayinfo(bvid, info.cid);
+                if (!playinfo) {
+                    return Promise.reject('视频信息查找失败');
+                }
+
+                // let src = playinfo.dash.audio[0].baseUrl;
+                let duration = playinfo.timelength;
+                return {
+                    type: 'bili', bvid, cid: info.cid, title: info.part, singers, cover, duration, album: title,
+                    // src
+                }
+            }))
+            .catch(e => {
+                reject('get videos info error');
+                console.log('get videos info error', e)
+                return;
+            });
+            // console.log(datas)
+            if (!datas) {
+                reject('视频信息查找失败');
+                return;
+            }
+            resolve([main, ...datas])
         })
         .catch(err => {
-            console.log('get bili video error', {
+            console.log(`get bili video https://www.bilibili.com/video/${bvid} error`, {
                 code: err.code,
-                response: err
+                response: {
+                    status: err.response.status,
+                    statusText: err.response.statusText
+                }
             })
-            reject({code: 0, message: '视频没找到'})
+            reject({message: '视频没找到', status: err.response.status})
         });
     })
 }
@@ -81,7 +108,11 @@ async function getPlayinfo(bvid, cid) {
         return;
     }
     
-    return await axios.get(`https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&fnval=4048`).then(response => response.data.data);
+    return await axios.get(`https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&fnval=4048`)
+    .then(response => response.data.data)
+    .catch(e => {
+        console.log(`get video ${bvid} playinfo error`, e)
+    });
 }
 /** 解析 html 获取 initialState, 失败返回 null  */
 function parseHTMLGetInitalState(html) {
@@ -123,36 +154,36 @@ function getVideoCover(bvid) {
     })
 }
 /**
- * 根据 url 下载 bilibili 的音频
+ * 根据 url 获取 bilibili 的音频
  * @param {string} src 音频 src 路径
  * @param {string} bv 视频 bv 号
  * @returns 
  */
-async function getAudio({src, bvid, title, singers, cover, duration}, req, res) {
-    // console.log(bvid)
+async function getAudio(playInfo, req, res) {
+    // console.log(playInfo)
+    let src = playInfo.dash.audio[0].baseUrl;
     let range = req.headers.range
     if (!range) {
         range = 'bytes=0';
     }
     let headerRange = range.split('bytes=')[1];
-    let [startRange, endRange] = headerRange.split('-').map(Number);
-    let chunksize = 1024*512;
+    let [startRange] = headerRange.split('-').map(Number);
     return new Promise(async (resolve, reject) => {
         await axios.get(src, {
             headers: {
-                referer: `https://www.bilibili.com/video/${bvid}`,
-                range: `bytes=${startRange}-${startRange + chunksize}`
+                referer: `https://www.bilibili.com/video`,
+                range: `bytes=${startRange}-`
             },
             responseType: 'stream'
         })
         .then(data => {
-            // console.dir(data)
-            let totalRange = data.headers['content-range'].split('/')[1];
+            // console.dir(data.headers)
+            // content-range 的结束 range 值不能超出 content-length, 否则会导致音频加载不能播放
             res.set({
-                'Content-Length': chunksize + 1,
+                'Content-Length': data.headers['content-length'],
                 'Content-Type': 'video/mp4',
                 "Accept-Ranges": "bytes",
-                'Content-Range': `bytes ${startRange}-${startRange + chunksize}/${totalRange}`,
+                'Content-Range': data.headers['content-range'],
             })
             res.status(206);
 
@@ -163,23 +194,6 @@ async function getAudio({src, bvid, title, singers, cover, duration}, req, res) 
             data.data.on('end', () => {
                 res.end(result)
             });
-
-            // 保存文件到本地写法
-            // 创建写入流写入本地
-            // let writeStream = fs.createWriteStream(path.resolve(biliAudioPathAbsolute, `${bvid}.mp3`), { encoding: "binary" })
-            // data.data.pipe(writeStream);
-            // data.data.on('close', async () => {
-            //     writeStream.close();
-            //     // 保存至数据库并返回对应的music_id
-            //     let music_id = await saveAudio(biliAudioPathRelative + `/${bvid}.mp3`, { title, singers, cover, duration })
-            //     if (!music_id) {
-            //         res.status(500).send({code: 0, message: '数据保存出现错误'})
-            //         return;
-            //     }
-            //     await staticMusic(music_id, req, res);
-            //     console.log(`The file name ${bvid} has been saved!`);
-            //     resolve({code: 1});
-            // })
         })
         .catch(e => {
             console.log(e);
@@ -240,24 +254,6 @@ async function saveAudio(path, { title, singers, cover, duration }) {
 }
 
 
-
-/** 解析 html 获取 playinfo, 失败返回 null, 弃用, 使用 parseHTMLGetInitalState */
-function parseHTMLGetPlayinfo(html) {
-    let $ = cheerio.load(html)
-    let playinfoStr = $('script')[2].children[0].data.split('window.__playinfo__=')[1];
-    let title = $('title')[0].children[0].data;
-    try {
-        return {
-            title,
-            playinfo: JSON.parse(playinfoStr),
-        }
-    } 
-    catch(e) {
-        console.log(`playinfo parse error`)
-        console.log(e)
-        return null;
-    }
-}
 
 
 module.exports = {

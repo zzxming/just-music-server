@@ -7,7 +7,11 @@
 
 **调用方式：** GET
 
-**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bv</font>
+**必选参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">bv</font>
+
+<font style="background: #f8f8f8; color: #e96900;">cid</font>：视频cid
 
 **成功返回：** 音频数据流
 
@@ -29,27 +33,30 @@
 
 **调用方式：** GET
 
-**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bv</font>
+**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
 
 **成功返回：**
 ```
 {
     code: number(1)
-    data: {
-        bvid: number
-        cid: number
-        cover: string
-        duration: number
-        album: string
-        singers: [
-            {
-                id: number
-                name: string
-            }
-        ]
-        title: string
-        src: string
-    }
+    data: [
+        {
+            type: string('bili')
+            bvid: number
+            cid: number
+            cover: string
+            duration: number
+            album: string
+            singers: [
+                {
+                    id: number
+                    name: string
+                }
+            ]
+            title: string
+            src: string
+        }
+    ]
 }
 ```
 **失败返回：**
