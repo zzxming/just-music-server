@@ -14,7 +14,8 @@ async function getBiliVideoInitialState(bvid) {
                 return;
             }
             
-            let bvid, cid, title, staff, cover, pages;
+            // console.log(initialState)
+            let bvid, cid, title, staff, cover, pages, pubdate;
             if (initialState.videoData) {
                 bvid = initialState.videoData.bvid;
                 cid = initialState.videoData.cid;
@@ -23,6 +24,7 @@ async function getBiliVideoInitialState(bvid) {
                 staff = initialState.videoData.staff || [initialState.upData];
                 cover = initialState.videoData.pic;
                 pages = initialState.videoData.pages;
+                pubdate = initialState.videoData.pubdate * 1000;
             }
             else {
                 bvid = initialState.videoInfo.bvid;
@@ -35,6 +37,7 @@ async function getBiliVideoInitialState(bvid) {
                     cover = '';
                 }
                 pages = initialState.videoInfo.pages;
+                pubdate = initialState.videoInfo.pubdate * 1000;
             }
             // console.log(bvid, cid)
             let singers = [];
@@ -61,7 +64,7 @@ async function getBiliVideoInitialState(bvid) {
             // let src = playinfo.dash.audio[0].baseUrl;
             let duration = playinfo.timelength;
             let main = {
-                type: 'bili', bvid, cid, title, singers, cover, duration, album: title,
+                type: 'bili', bvid, cid, title, singers, cover, duration, album: title, pubdate
                 // src
             }
 
@@ -73,8 +76,9 @@ async function getBiliVideoInitialState(bvid) {
 
                 // let src = playinfo.dash.audio[0].baseUrl;
                 let duration = playinfo.timelength;
+                // 分 p 的 pubdate 是不会变的
                 return {
-                    type: 'bili', bvid, cid: info.cid, title: info.part, singers, cover, duration, album: title,
+                    type: 'bili', bvid, cid: info.cid, title: info.part, singers, cover, duration, album: title, pubdate
                     // src
                 }
             }))

@@ -123,7 +123,8 @@
                 singer_name: string
             }
         ],
-        fee: number
+        fee: number，
+        publishTime: number
     }
 }
 ```
@@ -225,6 +226,13 @@
                 picUrl: string, 专辑封面图片路径
             }, 专辑信息
             dt: number, 歌曲时长
+            noCopyrightRcmd: {  // 这首歌在网易云音乐无法播放, 且有其他版本时
+                type: number
+                typeDesc: string
+                songId: number
+            }
+            st: number, -200 时表示歌曲下架了,没发播放
+            publishTime: number
         }
     ]
     count: number
@@ -388,6 +396,7 @@
             songId: number
         }
         st: number, -200 时表示歌曲下架了,没发播放
+        publishTime: number
     }
 }
 ```
