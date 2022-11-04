@@ -33,7 +33,7 @@
 
 **调用方式：** GET
 
-**必选参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
 
 **成功返回：**
 ```

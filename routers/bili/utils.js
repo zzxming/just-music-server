@@ -95,11 +95,12 @@ async function getBiliVideoInitialState(bvid) {
             resolve([main, ...datas])
         })
         .catch(err => {
+            console.log(err)
             console.log(`get bili video https://www.bilibili.com/video/${bvid} error`, {
                 code: err.code,
                 response: {
-                    status: err.response.status,
-                    statusText: err.response.statusText
+                    status: err.errno || err.response.status,
+                    statusText: err.code || err.response.statusText
                 }
             })
             reject({message: '视频没找到', status: err.response.status})

@@ -5,8 +5,8 @@ const { getBiliVideoInitialState, getAudio, getPlayinfo } = require('./utils');
 
 /** 获取 bili 音频数据 */
 router.get('/info', async (req, res) => {
-    const { query } = req;
-    const { bv } = query;
+    let { bv } = req.query;
+
     if (!bv) {
         res.status(401).send({code: 0, message: '参数bv缺失'})
         return;
@@ -15,7 +15,9 @@ router.get('/info', async (req, res) => {
     getBiliVideoInitialState(bv)
     .then(response => {
         // console.log(response)
-        res.send({code: 1, data: response});
+        let data = response;
+      
+        res.send({code: 1, data});
     })
     .catch(e => {
         console.log(e)
