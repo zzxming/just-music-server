@@ -14,8 +14,6 @@ git clone https://github.com/zzxming/just-music-server.git
 npm install
 ```
 
-进入 `db.js` 更改 `MySQL` 配置
-
 启动服务
 ```
 npm run start
