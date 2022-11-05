@@ -95,15 +95,13 @@ async function getBiliVideoInitialState(bvid) {
             resolve([main, ...datas])
         })
         .catch(err => {
-            console.log(err)
+            // console.log(err)
             console.log(`get bili video https://www.bilibili.com/video/${bvid} error`, {
-                code: err.code,
-                response: {
-                    status: err.errno || err.response.status,
-                    statusText: err.code || err.response.statusText
-                }
+                errtxt: err.code,
+                errno: err.errno,
+                response: err.response
             })
-            reject({message: '视频没找到', status: err.response.status})
+            reject({message: '视频没找到', status: err.response?.status ?? 404})
         });
     })
 }
@@ -133,7 +131,7 @@ function parseHTMLGetInitalState(html) {
             }
         }
         catch(e) {
-            console.log(e, 'initialState parse error')
+            console.log('initialState parse error', e)
             return null;
         }
     }
@@ -153,7 +151,7 @@ function getVideoCover(bvid) {
             }
         })
         .catch(e => {
-            console.log(e);
+            console.log('bili cover error', e);
             reject(e);
         });
     })
@@ -201,7 +199,7 @@ async function getAudio(playInfo, req, res) {
             });
         })
         .catch(e => {
-            console.log(e);
+            console.log('bili video get error', e);
             reject(e);
         })
     })
