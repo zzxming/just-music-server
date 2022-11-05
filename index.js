@@ -8,9 +8,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // 添加了下面的代码之后无法从其他地方(postman)通过 url 访问接口
 // 处理vue路由的history模式
-// const history = require('connect-history-api-fallback');
+const history = require('connect-history-api-fallback');
 // 不然的话当有路径时进行刷新会404. 官方文档https://github.com/bripkens/connect-history-api-fallback
-// app.use('/', history({}));
+app.use('/', history({}));
 
 app.use(express.static('./static'));
 

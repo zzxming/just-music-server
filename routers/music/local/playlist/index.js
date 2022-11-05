@@ -88,10 +88,12 @@ router.get('/detail', (req, res) => {
             u.*,
             p.*,
             p.playlist_id id,
-            p.playlist_title title
+            p.playlist_title title,
+            c.*
         from 
             user u,
-            (select * from playlist where playlist_id = '${id}') p
+            (select * from playlist where playlist_id = '${id}') p,
+            (select count(*) as trackCount from playlist_map where playlist_id = '${id}') c
         where u.user_id = p.creator_id
     `)
     .then(response => {

@@ -495,14 +495,21 @@
 <br>
 
 
-## **获取网易云音乐歌单中的所有歌曲**
-说明：获取网易云音乐的歌单中所有歌曲信息
+## **获取网易云音乐歌单中的歌曲**
+说明：获取网易云音乐的歌单中歌曲信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/track</font>
 
 **调用方式：** GET
 
-**必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
+**必填参数：** 
+
+<font style="background: #f8f8f8; color: #e96900;">id</font>
+
+**可选参数：**
+<font style="background: #f8f8f8; color: #e96900;">limit</font>：分页限制，默认1，每次最多返回500条数据
+
+
 
 **成功返回(主要使用参数)：**
 ```
@@ -705,6 +712,7 @@
     updateTime: number,
     public: number,
     playCount: number,
+    trackCount: number,
     creator: {
         userId: number,
         name: string,
@@ -790,7 +798,7 @@
 ## **随机获取本地歌单**
 说明：随机获取本地歌单信息
 
-**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/track</font>
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/random</font>
 
 **调用方式：** GET
 
@@ -809,6 +817,7 @@
         updateTime: number,
         public: number,
         playCount: number,
+        trackCount: number,
         creator: {
             userId: number,
             name: string,
