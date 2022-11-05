@@ -57,9 +57,13 @@ router.get('/highquality', (req, res) => {
 });
 /** 获取歌单内所有歌曲 */
 router.get('/track', (req, res) => {
-    let { id, cookie } = req.query;
+    let { id, cookie, limit } = req.query;
+    if (limit !== undefined && isNaN(limit)) {
+        res.status(400).send({code: 0, message: '参数错误'});
+        return;
+    }
     if (Object.prototype.toString.call(id) === '[object Array]') {
-        id = id[id.length - 1]
+        id = id[id.length - 1];
     }
     let headerCookie = undefined;
     if (req.headers.cookie) {
@@ -69,7 +73,8 @@ router.get('/track', (req, res) => {
     // 等几天之后再用这个 cookie 去请求喜欢的音乐歌单, 看看是不是能够一直用, 这个写的保存日期到 11月8号7:29:40
     // 登录才能查看的歌单需要 cookie 字段 MUSIC_U=8f069545eb4a429a5db0f274c047d1a85f78183878bee4c4f5f14f96832a9919993166e004087dd38514f7b65bd84edccbe961c68eef45197b4755491d668b41484a2707848abb74a89fe7c55eac81f3;
 
-    playlist_track_all({id, cookie: headerCookie ?? cookie})
+    // 需要limit和offset限制一下返回, 如果歌单内的歌曲超出1000的话会导致响应400
+    playlist_track_all({id, cookie: headerCookie ?? cookie, limit: 500, offset: (Number(limit) - 1) * 500})
     .then(response => {
         // console.log(response)
         const { code, songs, message, privileges } = response.body;
@@ -78,7 +83,7 @@ router.get('/track', (req, res) => {
             res.send({code: 1, data });
             return;
         }
-        res.send({code: 0, message})
+        res.send({code: 0, message: '意外错误'})
     })
     .catch(e => {
         console.log(e)
@@ -128,4 +133,101 @@ router.get('/detail', (req, res) => {
 module.exports = {
     router
 }
+
+
+
+
+
+
+
+
+/** playlist_track_all.js 改写
+module.exports = (query, request) => {
+  const data = {
+    id: query.id,
+    n: 100000,
+    s: query.s || 8,
+  }
+  //不放在data里面避免请求带上无用的数据
+  let limit = parseInt(query.limit) || Infinity
+  let offset = parseInt(query.offset) || 0
+
+  return request('POST', `https://music.163.com/api/v6/playlist/detail`, data, {
+    crypto: 'api',
+    cookie: query.cookie,
+    proxy: query.proxy,
+    realIP: query.realIP,
+  }).then((res) => {
+    let trackIds = res.body.playlist.trackIds
+    // 当歌单内歌曲信息超出1000时会使post数据过多, 导致后端无法接收到参数而返回400
+    if (trackIds.length > 800 && !limit) {
+      let idsDatas = [];
+      for (let i = 0; i < trackIds.length; i += 800) {
+        idsDatas.push({
+          c:
+            '[' +
+            trackIds
+              .slice(i, i + 800)
+              .map((item) => '{"id":' + item.id + '}')
+              .join(',') +
+            ']',
+        })
+      }
+      return Promise.all(idsDatas.map((c => {
+        return request(
+          'POST',
+          `https://music.163.com/api/v3/song/detail`,
+          c,
+          {
+            crypto: 'weapi',
+            cookie: query.cookie,
+            proxy: query.proxy,
+            realIP: query.realIP,
+          },
+        )
+      })))
+      .then(res => {
+        let songs = [];
+        let privileges = [];
+        res.map(item => {
+          songs.push(...item.body.songs)
+          privileges.push(...item.body.privileges)
+        })
+        return {
+          status: res.status,
+          body: {
+            songs,
+            privileges,
+            code: 200
+          },
+          cookie: res.cookie
+        }
+      })
+    }
+    // 不超过的数据正常返回
+
+    let idsData = {
+      c:
+        '[' +
+        trackIds
+          .slice(offset, offset + limit)
+          .map((item) => '{"id":' + item.id + '}')
+          .join(',') +
+        ']',
+    }
+
+    return request(
+      'POST',
+      `https://music.163.com/api/v3/song/detail`,
+      idsData,
+      {
+        crypto: 'weapi',
+        cookie: query.cookie,
+        proxy: query.proxy,
+        realIP: query.realIP,
+      },
+    )
+  })
+}
+ */
 
