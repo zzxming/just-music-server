@@ -69,6 +69,49 @@
 ```
 
 <br>
+
+## **获取哔哩哔哩音频信息并以歌单形式返回** 
+说明：根据哔哩哔哩 bv 号获取音频信息，格式以歌单形式
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/bili/playlist</font>
+
+**调用方式：** GET
+
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
+
+**成功返回：**
+```
+{
+    code: number(1)
+    data: {
+        type: 'bili',
+        id: string,
+        title: string,
+        cover: string,
+        trackCount: number,
+        updateTime: createTime: number,
+        createTime: number,
+        description: string,
+        playCount: number,
+        creator: {
+            userId: number,
+            name: string,
+            avatarUrl: string
+        }
+    }
+}
+```
+**失败返回：**
+```
+{
+    code: number(0)
+    message: string
+    error: Error
+}
+```
+
+<br>
+
 <br>
 
 

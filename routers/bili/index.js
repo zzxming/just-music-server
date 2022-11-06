@@ -1,10 +1,88 @@
 
 const router = require("express").Router();
-const { getBiliVideoInitialState, getAudio, getPlayinfo } = require('./utils');
+const { getBiliVideoInitialState, getAudio, getPlayinfo, parseHTMLGetInitalState } = require('./utils');
+const axios = require("axios");
 
 
+router.get('/playlist', (req, res) => {
+    let { bv } = req.query;
+    if (!bv) {
+        res.status(401).send({code: 0, message: '参数bv缺失'})
+        return;
+    }
+
+    axios.get(`https://www.bilibili.com/video/${bv}`)
+    .then(async data => {
+        let initialState = parseHTMLGetInitalState(data.data);
+        if (!initialState) {
+            reject('视频state未找到');
+            return;
+        }
+        // console.log(initialState)
+        
+        let bvid, cover, title, pages, pubdate, creator, description, createTime, trackCount, playCount;
+        if (initialState.videoData) {
+            title = initialState.videoData.title;
+            bvid = initialState.videoData.bvid;
+            cover = initialState.videoData.pic;
+            pages = initialState.videoData.pages;
+            pubdate = initialState.videoData.pubdate * 1000;
+            description = initialState.videoData.desc;
+            createTime = initialState.videoData.ctime * 1000;
+            trackCount = initialState.videoData.pages.length;
+            playCount = initialState.videoData.stat.view;
+            creator = {
+                userId: initialState.videoData.owner.mid,
+                name: initialState.videoData.owner.name,
+                avatarUrl: initialState.videoData.owner.face
+            }
+        }
+        else {
+            title = initialState.videoInfo.title;
+            bvid = initialState.videoInfo.bvid;
+            cover = initialState.sectionEpisodes.find(info => info.bvid === bvid).cover;
+            // cover =  await getVideoCover(bvid);
+            // if (!cover) {
+            //     console.log(`视频${bvid}封面未找到`);
+            //     cover = '';
+            // }
+            pages = initialState.videoInfo.pages;
+            pubdate = initialState.videoInfo.pubdate * 1000;
+            description = initialState.videoInfo.desc;
+            createTime = initialState.videoInfo.pubdate * 1000;
+            trackCount = initialState.videoInfo.pages.length;
+            playCount = initialState.videoInfo.viewCount;
+            creator = {
+                userId: initialState.videoStaffs[0].mid,
+                name: initialState.videoStaffs[0].name,
+                avatarUrl: initialState.videoStaffs[0].face
+            }
+        }
+
+
+        res.send({
+            code: 1,
+            data: {
+                type: 'bili',
+                id: bvid,
+                title,
+                cover,
+                trackCount,
+                updateTime: createTime,
+                createTime,
+                description,
+                playCount,
+                creator
+            }
+        })
+    })
+    .catch(e => {
+        console.log(e, 'info error')
+        res.status(e.status ?? 400).send({code: 0, message: e.message, data: []});
+    })
+})
 /** 获取 bili 音频数据 */
-router.get('/info', async (req, res) => {
+router.get('/info', (req, res) => {
     let { bv } = req.query;
     if (!bv) {
         res.status(401).send({code: 0, message: '参数bv缺失'})
@@ -20,7 +98,7 @@ router.get('/info', async (req, res) => {
     })
     .catch(e => {
         // console.log(e, 'info')
-        res.status(e.status).send({code: 0, message: e.message, data: []});
+        res.status(e.status ?? 400).send({code: 0, message: e.message, data: []});
     })
 });
 /** 保存并返回 bili 音频 */

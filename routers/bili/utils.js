@@ -27,11 +27,12 @@ async function getBiliVideoInitialState(bvid) {
             else {
                 bvid = initialState.videoInfo.bvid;
                 staff = initialState.videoStaffs;
-                cover =  await getVideoCover(bvid);
-                if (!cover) {
-                    console.log(`视频${bvid}封面未找到`);
-                    cover = '';
-                }
+                cover = initialState.sectionEpisodes.find(info => info.bvid === bvid).cover;
+                // cover =  await getVideoCover(bvid);
+                //     if (!cover) {
+                //         console.log(`视频${bvid}封面未找到`);
+                //         cover = '';
+                //     }
                 pages = initialState.videoInfo.pages;
                 pubdate = initialState.videoInfo.pubdate * 1000;
             }
