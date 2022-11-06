@@ -10,16 +10,14 @@ async function getBiliVideoInitialState(bvid) {
         .then(async data => {
             let initialState = parseHTMLGetInitalState(data.data);
             if (!initialState) {
-                reject('视频state未找到')
+                reject('视频state未找到');
                 return;
             }
             
             // console.log(initialState)
-            let bvid, cid, title, staff, cover, pages, pubdate;
+            let bvid, staff, cover, pages, pubdate;
             if (initialState.videoData) {
                 bvid = initialState.videoData.bvid;
-                cid = initialState.videoData.cid;
-                title = initialState.videoData.title;
                 // 联合投稿有 videoData.staff, 个人投稿只有 upData
                 staff = initialState.videoData.staff || [initialState.upData];
                 cover = initialState.videoData.pic;
@@ -28,8 +26,6 @@ async function getBiliVideoInitialState(bvid) {
             }
             else {
                 bvid = initialState.videoInfo.bvid;
-                cid = initialState.videoInfo.cid;
-                title = initialState.videoInfo.title;
                 staff = initialState.videoStaffs;
                 cover =  await getVideoCover(bvid);
                 if (!cover) {
@@ -53,49 +49,23 @@ async function getBiliVideoInitialState(bvid) {
                     }
                 })
             }
-            // console.log(singer)
-            let playinfo = await getPlayinfo(bvid, cid);
-            if (!playinfo) {
-                reject('视频没找到');
-                return;
-            }
-            // res.send(playinfo)
-    
-            // let src = playinfo.dash.audio[0].baseUrl;
-            let duration = playinfo.timelength;
-            let main = {
-                type: 'bili', bvid, cid, title, singers, cover, duration, album: title, pubdate
-                // src
-            }
+            // console.log(initialState)
 
-            let datas = await Promise.all(pages.slice(1).map(async info => {
-                let playinfo = await getPlayinfo(bvid, info.cid);
-                if (!playinfo) {
-                    return Promise.reject('视频信息查找失败');
-                }
-
-                // let src = playinfo.dash.audio[0].baseUrl;
-                let duration = playinfo.timelength;
-                // 分 p 的 pubdate 是不会变的
+            let datas = pages.map(item => {
                 return {
-                    type: 'bili', bvid, cid: info.cid, title: info.part, singers, cover, duration, album: title, pubdate
-                    // src
+                    type: 'bili', bvid,  singers, pubdate,
+                    cid: item.cid,
+                    title: item.part,
+                    album: item.part,
+                    duration: item.duration * 1000,
+                    cover: item.first_frame ?? cover,
                 }
-            }))
-            .catch(e => {
-                reject('get videos info error');
-                console.log('get videos info error', e)
-                return;
-            });
-            // console.log(datas)
-            if (!datas) {
-                reject('视频信息查找失败');
-                return;
-            }
-            resolve([main, ...datas])
+            })
+            
+            resolve(datas)
         })
         .catch(err => {
-            // console.log(err)
+            console.log(err)
             console.log(`get bili video https://www.bilibili.com/video/${bvid} error`, {
                 errtxt: err.code,
                 errno: err.errno,
@@ -114,7 +84,19 @@ async function getPlayinfo(bvid, cid) {
     return await axios.get(`https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&fnval=4048`)
     .then(response => response.data.data)
     .catch(e => {
-        console.log(`get video ${bvid} playinfo error`, e)
+        // console.log(e.response.data)
+        console.log(`get video ${bvid} cid: ${cid} playinfo error`, {
+            code: e.code,
+            status: e.response.status,
+            statusText: e.response.statusText,
+            data: e.response.data
+        })
+        let result = {}
+        result.status = e.response.status ?? 400;
+        result.message = e.response.message ?? '网络错误';
+        result.code = e.code ?? 'ECONNRESET';
+        result.errno = e.errno ?? '-4077';
+        return Promise.reject(result)
     });
 }
 /** 解析 html 获取 initialState, 失败返回 null  */
@@ -163,7 +145,6 @@ function getVideoCover(bvid) {
  * @returns 
  */
 async function getAudio(playInfo, req, res) {
-    // console.log(playInfo)
     let src = playInfo.dash.audio[0].baseUrl;
     let range = req.headers.range
     if (!range) {

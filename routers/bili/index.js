@@ -6,7 +6,6 @@ const { getBiliVideoInitialState, getAudio, getPlayinfo } = require('./utils');
 /** 获取 bili 音频数据 */
 router.get('/info', async (req, res) => {
     let { bv } = req.query;
-
     if (!bv) {
         res.status(401).send({code: 0, message: '参数bv缺失'})
         return;
@@ -20,7 +19,7 @@ router.get('/info', async (req, res) => {
         res.send({code: 1, data});
     })
     .catch(e => {
-        console.log(e)
+        // console.log(e, 'info')
         res.status(e.status).send({code: 0, message: e.message, data: []});
     })
 });
@@ -34,26 +33,23 @@ router.get('/audio', async (req, res) => {
         return;
     }
 
-
-    let playInfo = await getPlayinfo(bvid, cid)
-    .catch(e => {
+    let playInfo = await getPlayinfo(bvid, cid);
+    if (!playInfo) {
         res.status(404).send({code: 0, message: e, data: []});
         return;
-    });
-
-    if (playInfo) {
-        await getAudio(playInfo, req, res)
-        .catch(e => {
-            console.log('get bilibili audio error', e)
-            res.status(503).send({
-                code: 0, 
-                error: {
-                    errno: e.message ?? e.body.msg ?? undefined,
-                }, 
-                message: e.message || e.code || e.body.message || e.body.msg.code
-            })
-        });
     }
+
+    await getAudio(playInfo, req, res)
+    .catch(e => {
+        console.log('get bilibili audio error', e)
+        res.status(503).send({
+            code: 0, 
+            error: {
+                errno: e.message ?? e.body.msg ?? undefined,
+            }, 
+            message: e.message || e.code || e.body.message || e.body.msg.code
+        })
+    });
     
 });
 /** 无 reference 获取 bili 资源文件 */

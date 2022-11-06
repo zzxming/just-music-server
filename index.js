@@ -10,7 +10,16 @@ app.use(express.urlencoded({ extended: false }));
 // 处理vue路由的history模式
 const history = require('connect-history-api-fallback');
 // 不然的话当有路径时进行刷新会404. 官方文档https://github.com/bripkens/connect-history-api-fallback
-app.use('/', history({}));
+app.use(history({
+    rewrites: [
+        {
+            from: /^\/bili\/.*$/,
+            to: function(context) {
+                return context.parsedUrl.path
+            }
+        }
+    ]
+}));
 
 app.use(express.static('./static'));
 
