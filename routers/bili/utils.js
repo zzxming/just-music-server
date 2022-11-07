@@ -72,7 +72,7 @@ async function getBiliVideoInitialState(bvid) {
                 errno: err.errno,
                 response: err.response
             })
-            reject({message: '视频没找到', status: err.response?.status ?? 404})
+            reject({message: err.response.status === 403 ? '哔哩哔哩拒绝了请求' : '视频没找到', status: err.response?.status ?? 404})
         });
     })
 }
