@@ -153,6 +153,7 @@ async function getAudio(playInfo, req, res) {
     }
     let headerRange = range.split('bytes=')[1];
     let [startRange] = headerRange.split('-').map(Number);
+
     return new Promise(async (resolve, reject) => {
         await axios.get(src, {
             headers: {
@@ -162,15 +163,25 @@ async function getAudio(playInfo, req, res) {
             responseType: 'stream'
         })
         .then(data => {
+            let total = Number(data.headers['content-length']);
             // console.dir(data.headers)
             // content-range 的结束 range 值不能超出 content-length, 否则会导致音频加载不能播放
-            res.set({
-                'Content-Length': data.headers['content-length'],
-                'Content-Type': 'video/mp4',
-                "Accept-Ranges": "bytes",
-                'Content-Range': data.headers['content-range'],
-            })
+            if (range === 'bytes=0-1') {    //判断是不是IOS发起的预请求
+                res.set({
+                    'Content-Range': `bytes 0-1/${total}`
+                })
+            }
+            else {
+                res.set({
+                    'Content-Length': 800000 >= total ? String(total) : '800000',
+                    'Content-Type': 'video/mp4',
+                    "Accept-Ranges": "bytes",
+                    'Content-Range': `bytes ${startRange}-${800000 >= total ? startRange + total - 1 : startRange + 800000}/${total + startRange}`,
+                })
+            }
+        
             res.status(206);
+            
 
             let result = Buffer.from([]);
             data.data.on('data', (chunk) => {
