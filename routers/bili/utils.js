@@ -72,7 +72,7 @@ async function getBiliVideoInitialState(bvid) {
                 errno: err.errno,
                 response: err.response
             })
-            reject({message: err.response.status === 403 ? '哔哩哔哩拒绝了请求' : '视频没找到', status: err.response?.status ?? 404})
+            reject({message: err.response?.status === 403 || err.code === 'ECONNRESET' ? '哔哩哔哩拒绝了请求' : '视频没找到', status: err.response?.status ?? 404})
         });
     })
 }
@@ -85,16 +85,16 @@ async function getPlayinfo(bvid, cid) {
     return await axios.get(`https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&fnval=4048`)
     .then(response => response.data.data)
     .catch(e => {
-        // console.log(e.response.data)
+        console.log(e)
         console.log(`get video ${bvid} cid: ${cid} playinfo error`, {
             code: e.code,
-            status: e.response.status,
-            statusText: e.response.statusText,
-            data: e.response.data
+            status: e.response?.status,
+            statusText: e.response?.statusText,
+            data: e.response?.data
         })
         let result = {}
-        result.status = e.response.status ?? 400;
-        result.message = e.response.message ?? '网络错误';
+        result.status = e.response?.status ?? 400;
+        result.message = e.response?.message ?? '网络错误';
         result.code = e.code ?? 'ECONNRESET';
         result.errno = e.errno ?? '-4077';
         return Promise.reject(result)
@@ -152,37 +152,50 @@ async function getAudio(playInfo, req, res) {
         range = 'bytes=0';
     }
     let headerRange = range.split('bytes=')[1];
-    let [startRange] = headerRange.split('-').map(Number);
-
+    let [startRange, endRange] = headerRange.split('-').map(Number);
+    // console.log(startRange, endRange)
+    if (range === 'bytes=0-1') {
+        endRange = 1;
+    }
+    // console.log(range,startRange)
+    // ios safari 调整进度会导致触发 end 事件切换下一首
+    // console.log(req.headers)
     return new Promise(async (resolve, reject) => {
         await axios.get(src, {
             headers: {
                 referer: `https://www.bilibili.com/video`,
-                range: `bytes=${startRange}-`
+                range: `bytes=${startRange}-${endRange === 1 ? endRange : startRange + 323546}`
             },
             responseType: 'stream'
         })
         .then(data => {
-            let total = Number(data.headers['content-length']);
-            // console.dir(data.headers)
+            // console.log(data.headers)
+            let len = data.headers['content-length']
+            let contentRange = data.headers['content-range'];
+            // let total = contentRange.split('/')[1];
+            // let [startRange, endRange] = contentRange.split('/')[0].split('bytes')[1].split('-');
+            // console.log(contentRange)
+            // console.log(data.headers)
             // content-range 的结束 range 值不能超出 content-length, 否则会导致音频加载不能播放
-            if (range === 'bytes=0-1') {    //判断是不是IOS发起的预请求
+            // if (range === 'bytes=0-1') {    //判断是不是IOS发起的预请求
+            //     res.set({
+            //         'Content-Length': `${len}`,
+            //         'Content-Type': 'audio/mp3',
+            //         "Accept-Ranges": "bytes",
+            //         'Content-Range': `bytes 0-1/${total}`,
+            //     })
+            // }
+            // else {
                 res.set({
-                    'Content-Range': `bytes 0-1/${total}`
-                })
-            }
-            else {
-                res.set({
-                    'Content-Length': 800000 >= total ? String(total) : '800000',
-                    'Content-Type': 'video/mp4',
+                    'Content-Length': `${len}`,
+                    'Content-Type': 'audio/mpeg',
                     "Accept-Ranges": "bytes",
-                    'Content-Range': `bytes ${startRange}-${800000 >= total ? startRange + total - 1 : startRange + 800000}/${total + startRange}`,
+                    'Content-Range': `${contentRange}`,
                 })
-            }
+            // }
         
             res.status(206);
             
-
             let result = Buffer.from([]);
             data.data.on('data', (chunk) => {
                 result = Buffer.concat([result, chunk])

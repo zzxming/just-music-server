@@ -1,7 +1,12 @@
 
 const express = require("express");
+const timeout = require("connect-timeout");
+const axios = require("axios");
+
 
 const app = express();
+app.timeout = 3000;
+app.use(timeout(120000));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
 
@@ -20,6 +25,19 @@ app.use(history({
         }
     ]
 }));
+
+axios.interceptors.response.use((response) => {
+    // 对响应数据做点什么
+    return response;
+}, (error) => {
+    console.log(error, 'axios error')
+    if (error.code && error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT') {
+        error.status = 504;
+    }
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+
 
 app.use(express.static('./static'));
 

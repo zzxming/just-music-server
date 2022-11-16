@@ -111,9 +111,16 @@ router.get('/audio', async (req, res) => {
         return;
     }
 
-    let playInfo = await getPlayinfo(bvid, cid);
+    let playInfo = await getPlayinfo(bvid, cid)
+    .catch(e => {
+        console.log('get bilibili playurl error', e)
+        res.status(e.status).send({
+            code: 0, 
+            error: e.code,
+            message: e.message
+        })
+    });
     if (!playInfo) {
-        res.status(404).send({code: 0, message: e, data: []});
         return;
     }
 
