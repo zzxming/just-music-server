@@ -104,7 +104,7 @@ router.get('/info', (req, res) => {
 /** 保存并返回 bili 音频 */
 router.get('/audio', async (req, res) => {
     const { query } = req;
-    const { bvid, cid } = query;
+    const { bvid, cid, partialrange } = query;
 
     if (!bvid || !cid) {
         res.status(401).send({code: 0, message: '参数bv缺失'})
@@ -124,7 +124,7 @@ router.get('/audio', async (req, res) => {
         return;
     }
 
-    await getAudio(playInfo, req, res)
+    await getAudio(playInfo, partialrange, req, res)
     .catch(e => {
         console.log('get bilibili audio error', e)
         res.status(503).send({

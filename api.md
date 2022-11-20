@@ -13,6 +13,8 @@
 
 <font style="background: #f8f8f8; color: #e96900;">cid</font>：视频cid
 
+**可选参数：**<font style="background: #f8f8f8; color: #e96900;">partialrange</font>：是否使用一次加载全部音频，1为否，0为是，默认0
+
 **成功返回：** 音频数据流
 
 **失败返回：**
