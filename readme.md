@@ -2,6 +2,8 @@
 
 项目 just-music 的后端服务器代码，接口信息在 api.md 中
 
+[项目前端地址](https://github.com/zzxming/just-music)
+
 # 安装与运行
 
 克隆项目

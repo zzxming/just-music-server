@@ -15,8 +15,9 @@ router.get('/playlist', (req, res) => {
     .then(async data => {
         let initialState = parseHTMLGetInitalState(data.data);
         if (!initialState) {
-            reject('视频state未找到');
-            return;
+            return Promise.reject({
+                message: '视频state未找到'
+            });
         }
         // console.log(initialState)
         
