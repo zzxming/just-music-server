@@ -3,3 +3,4 @@ node_modules
 *.sql
 static/assets
 static/index.html
+.vercel
