@@ -1,5 +1,6 @@
 # **哔哩哔哩相关接口**
-## **获取哔哩哔哩音频** 
+
+## **获取哔哩哔哩音频**
 
 说明：调用此接口可以根据 bv 号获取到哔哩哔哩视频的音频数据，并保存至路径对应位置
 
@@ -7,17 +8,18 @@
 
 **调用方式：** GET
 
-**必选参数：** 
+**必选参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">bv</font>
 
-<font style="background: #f8f8f8; color: #e96900;">cid</font>：视频cid
+<font style="background: #f8f8f8; color: #e96900;">cid</font>：视频 cid
 
-**可选参数：**<font style="background: #f8f8f8; color: #e96900;">partialrange</font>：是否使用一次加载全部音频，1为否，0为是，默认0
+**可选参数：**<font style="background: #f8f8f8; color: #e96900;">partialrange</font>：是否使用一次加载全部音频，1 为否，0 为是，默认 0
 
 **成功返回：** 音频数据流
 
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -28,16 +30,18 @@
 
 <br>
 
-## **获取哔哩哔哩音频信息** 
+## **获取哔哩哔哩音频信息**
+
 说明：根据哔哩哔哩 bv 号获取音频信息，格式类似本地音频信息格式
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/bili/info</font>
 
 **调用方式：** GET
 
-**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv 号
 
 **成功返回：**
+
 ```
 {
     code: number(1)
@@ -61,7 +65,9 @@
     ]
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -72,16 +78,18 @@
 
 <br>
 
-## **获取哔哩哔哩音频信息并以歌单形式返回** 
+## **获取哔哩哔哩音频信息并以歌单形式返回**
+
 说明：根据哔哩哔哩 bv 号获取音频信息，格式以歌单形式
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/bili/playlist</font>
 
 **调用方式：** GET
 
-**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv号
+**必填参数：** <font style="background: #f8f8f8; color: #e96900;">bvid</font>：bv 号
 
 **成功返回：**
+
 ```
 {
     code: number(1)
@@ -103,7 +111,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -116,9 +126,10 @@
 
 <br>
 
-
 # **音乐相关接口**
-## **获取本地音频** 
+
+## **获取本地音频**
+
 说明：根据本地数据库的 id 获取音频
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/:id</font>
@@ -130,6 +141,7 @@
 **成功返回：** 音频数据流
 
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -139,7 +151,6 @@
 ```
 
 <br>
-
 
 ## **获取本地音频信息**
 
@@ -152,6 +163,7 @@
 **必选参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回：**
+
 ```
 {
     code: number(1)
@@ -173,7 +185,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -185,6 +199,7 @@
 <br>
 
 ## **搜索本地数据库**
+
 说明：根据关键字搜索本地数据库
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/search/local</font>
@@ -193,15 +208,16 @@
 
 **必选参数：** <font style="background: #f8f8f8; color: #e96900;">kw</font>
 
-**可选参数：** 
+**可选参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">type</font>：搜索类型，默认 1，歌曲搜索
 
-<font style="background: #f8f8f8; color: #e96900;">limit</font>：页数，默认1
+<font style="background: #f8f8f8; color: #e96900;">limit</font>：页数，默认 1
 
-<font style="background: #f8f8f8; color: #e96900;">offset</font>：一页的数据量，默认10
+<font style="background: #f8f8f8; color: #e96900;">offset</font>：一页的数据量，默认 10
 
 **成功返回：**
+
 ```
 {
     code: number(1)
@@ -226,6 +242,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -237,21 +254,29 @@
 <br>
 
 ## **搜索网易云音乐**
+
 说明：根据关键字搜索网易云音乐
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/search/cloud</font>
 
 **调用方式：** GET
 
-**必选参数：** <font style="background: #f8f8f8; color: #e96900;">kw</font>
+**必选参数：**
 
-**可选参数：** 
+| query | 描述       |
+| ----- | ---------- |
+| kw    | 搜索关键字 |
 
-<font style="background: #f8f8f8; color: #e96900;">t</font>：搜索类型，默认 1，歌曲搜索
+**可选参数：**
 
-<font style="background: #f8f8f8; color: #e96900;">limit</font>：页数，默认 1
+| query    | 描述                       |
+| -------- | -------------------------- |
+| t        | 搜索类型, 默认 1, 歌曲搜索 |
+| limit    | 页数, 默认 1               |
+| pageSize | 一页条数, 默认 20          |
 
 **成功返回(主要使用参数)：**
+
 ```
 {
     code: number(1)
@@ -276,6 +301,7 @@
                 typeDesc: string
                 songId: number
             }
+            fee: number 1 表示为 vip 歌曲
             st: number, -200 时表示歌曲下架了,没发播放
             publishTime: number
         }
@@ -283,7 +309,9 @@
     count: number
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -292,23 +320,24 @@
 }
 ```
 
-<br> 
-
+<br>
 
 ## **网易云用户登录**
+
 说明：通过手机号和密码登录网易云账号
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/login</font>
 
 **调用方式：** POST
 
-**必选参数：** 
+**必选参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">phone</font>：手机号
 
 <font style="background: #f8f8f8; color: #e96900;">password</font>：密码
 
 **成功返回：**
+
 ```
 {
     code: number(200)
@@ -318,7 +347,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -330,6 +361,7 @@
 <br>
 
 ## **获取网易云用户登录状态**
+
 说明：通过登录后的 cookie 获取网易云用户登录状态
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/status</font>
@@ -337,6 +369,7 @@
 **调用方式：** POST
 
 **成功返回：**
+
 ```
 {
     code: number(200)
@@ -347,7 +380,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -359,6 +394,7 @@
 <br>
 
 ## **退出网易云用户登录**
+
 说明：退出网易云用户登录状态
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/logout</font>
@@ -366,12 +402,15 @@
 **调用方式：** POST
 
 **成功返回：**
+
 ```
 {
     code: number(200)
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(400)
@@ -383,6 +422,7 @@
 <br>
 
 ## **刷新网易云用户登录状态**
+
 说明：刷新登录状态
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/user/refresh</font>
@@ -390,12 +430,15 @@
 **调用方式：** POST
 
 **成功返回：**
+
 ```
 {
     code: number(200)
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(400)
@@ -404,18 +447,24 @@
 }
 ```
 
-<br> 
+<br>
 
 ## **获取网易云歌曲信息**
+
 说明：通过网易云歌曲 id 获取歌曲信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/info</font>
 
 **调用方式：** GET
 
-**必填参数：** <font style="background: #f8f8f8; color: #e96900;">ids</font>：id 的字符串，使用<font style="background: #f8f8f8; color: #e96900;"> , </font>链接可以一次查询多个
+**必填参数：**
+
+| query | 描述                                     |
+| ----- | ---------------------------------------- |
+| ids   | id 的字符串，使用`,`链接可以一次查询多个 |
 
 **成功返回：**
+
 ```
 {
     code: number(1)
@@ -440,12 +489,15 @@
             typeDesc: string
             songId: number
         }
-        st: number, -200 时表示歌曲下架了,没发播放
+        fee: number 1 表示为 vip 歌曲
+        st: number  // -200 时表示歌曲下架了,没发播放
         publishTime: number
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -456,24 +508,27 @@
 
 <br>
 
-
 ## **获取网易云歌曲播放路径**
+
 说明：通过网易云歌曲 id 获取歌曲播放路径
 
-**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/info/:id</font>
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/:id</font>
 
 **调用方式：** GET
 
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回：**
+
 ```
 {
     code: number(1)
     src: string, 歌曲播放路径
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -485,13 +540,14 @@
 <br>
 
 ## **获取网易云精选歌单**
+
 说明：通过网易云精选歌单信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/highquality</font>
 
 **调用方式：** GET
 
-**可选参数：** 
+**可选参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">cat</font>：歌单类型，可选值有（全部， 华语， 欧美， 韩语， 日语， 粤语， 小语种， 运动， ACG， 影视原声， 流行， 摇滚， 后摇， 古风， 民谣， 轻音乐， 电子， 器乐， 说唱， 古典， 爵士）
 
@@ -500,6 +556,7 @@
 <font style="background: #f8f8f8; color: #e96900;">before</font>：上次获取结果中的 lasttime，用于翻页时获取数据
 
 **成功返回(主要使用参数)：**
+
 ```
 {
     code: number(1)
@@ -528,7 +585,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -539,24 +598,29 @@
 
 <br>
 
-
 ## **获取网易云音乐歌单中的歌曲**
+
 说明：获取网易云音乐的歌单中歌曲信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/track</font>
 
 **调用方式：** GET
 
-**必填参数：** 
+**必填参数：**
 
-<font style="background: #f8f8f8; color: #e96900;">id</font>
+| query | 描述    |
+| ----- | ------- |
+| id    | 歌单 id |
 
 **可选参数：**
-<font style="background: #f8f8f8; color: #e96900;">limit</font>：分页限制，默认1，每次最多返回500条数据
 
-
+| query    | 描述                                      |
+| -------- | ----------------------------------------- |
+| limit    | 分页限制，默认 1，每次最多返回 500 条数据 |
+| pageSize | 每页条数，默认 500                        |
 
 **成功返回(主要使用参数)：**
+
 ```
 {
     code: number(1)
@@ -581,12 +645,15 @@
                 typeDesc: string
                 songId: number
             }
+            fee: number 1 表示为 vip 歌曲
             st: number, -200 时表示歌曲下架了,没发播放
         }
     ]
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -597,9 +664,9 @@
 
 <br>
 
-
 ## **获取网易云歌单详细信息**
-说明：根据id获取网易云歌单的信息
+
+说明：根据 id 获取网易云歌单的信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/detail</font>
 
@@ -608,6 +675,7 @@
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回(主要使用参数)：**
+
 ```
 {
     code: number(1)
@@ -638,7 +706,7 @@
                 ]，
                 dt: number, 歌曲时长
             }
-        ], 歌曲信息, 长度为10, 
+        ], 歌曲信息, 长度为10,
         creator: {
             userId: number
             nickname: string
@@ -648,7 +716,9 @@
     }
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number
@@ -659,17 +729,18 @@
 
 <br>
 
-
 ## **获取网易云每日随机推荐**
+
 说明：获取网易云每日随机推荐
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/personalized</font>
 
 **调用方式：** GET
 
-**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：获取的歌单数, 默认30
+**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：获取的歌单数, 默认 30
 
 **成功返回(主要使用参数)：**
+
 ```
 {
     code: number(1)
@@ -685,7 +756,9 @@
     ]
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number(0)
@@ -696,8 +769,8 @@
 
 <br>
 
-
 ## **创建本地歌单**
+
 说明：创建本地歌单
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/create</font>
@@ -706,7 +779,7 @@
 
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">title</font>：歌单标题
 
-**可选参数：** 
+**可选参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">description</font>：歌单简介
 
@@ -717,13 +790,16 @@
 <font style="background: #f8f8f8; color: #e96900;">creator_id</font>：创建者 id
 
 **成功返回：**
+
 ```
 {
     code: number
     message: string
 }
 ```
+
 **失败返回：**
+
 ```
 {
     code: number
@@ -733,8 +809,38 @@
 
 <br>
 
+## **根据分享链接获取歌单 id**
+
+**接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/cloud/playlist/import</font>
+
+**调用方式：** GET
+
+**可选参数：**
+
+| query | 类型   |
+| ----- | ------ |
+| url   | string |
+
+**成功返回：**
+
+```
+{
+    id: string
+}
+```
+
+**失败返回：**
+
+```
+{
+    id: ''  // 空字符串
+}
+```
+
+<br>
 
 ## **获取本地歌单信息**
+
 说明：根据 id 获取本地歌单信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/detail</font>
@@ -744,6 +850,7 @@
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回：**
+
 ```
 {
     type: string(local),
@@ -768,6 +875,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number,
@@ -778,6 +886,7 @@
 <br>
 
 ## **获取本地歌单内所有歌曲信息**
+
 说明：根据 id 获取本地歌单内所有歌曲信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/track</font>
@@ -787,6 +896,7 @@
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回(主要使用参数)：**
+
 ```
 [
     {
@@ -831,6 +941,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number,
@@ -841,15 +952,17 @@
 <br>
 
 ## **随机获取本地歌单**
+
 说明：随机获取本地歌单信息
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/random</font>
 
 **调用方式：** GET
 
-**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：默认10
+**可选参数：** <font style="background: #f8f8f8; color: #e96900;">limit</font>：默认 10
 
 **成功返回：**
+
 ```
 [
     {
@@ -873,6 +986,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number,
@@ -883,6 +997,7 @@
 <br>
 
 ## **本地歌单播放数增加**
+
 说明：增加本地歌单的播放数
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/countadd</font>
@@ -892,6 +1007,7 @@
 **必填参数：** <font style="background: #f8f8f8; color: #e96900;">id</font>
 
 **成功返回：**
+
 ```
 {
     code: number,
@@ -900,6 +1016,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number,
@@ -910,13 +1027,14 @@
 <br>
 
 ## **更新本地歌单信息**
+
 说明：增加本地歌单的播放数
 
 **接口地址：** <font style="background: #f8f8f8; color: #e96900;">/music/local/playlist/update</font>
 
 **调用方式：** POST
 
-**必填参数：** 
+**必填参数：**
 
 <font style="background: #f8f8f8; color: #e96900;">id</font>
 
@@ -928,8 +1046,8 @@
 
 <font style="background: #f8f8f8; color: #e96900;">public</font>：更新后歌单是否公开
 
-
 **成功返回：**
+
 ```
 {
     code: number,
@@ -938,6 +1056,7 @@
 ```
 
 **失败返回：**
+
 ```
 {
     code: number,

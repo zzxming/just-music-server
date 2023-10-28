@@ -180,7 +180,6 @@ async function getAudio(playInfo, partialrange, req, res) {
             headers: {
                 referer: `https://www.bilibili.com/video`,
                 range: partialrange === '1' ? `bytes=${startRange}-${endRange === 1 ? endRange : startRange + 323546}` : range
-                // range: isIPhone ? range : `bytes=${startRange}-${endRange === 1 ? endRange : startRange + 323546}`
             },
             responseType: 'stream'
         })
