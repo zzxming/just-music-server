@@ -1,9 +1,9 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+import axios from 'axios';
+import cheerio from 'cheerio';
 // const { dbQuery } = require("../../tools");
 
 /** 根据 bvid 获取音频信息 */
-async function getBiliVideoInitialState(bvid) {
+export async function getBiliVideoInitialState(bvid) {
 	return new Promise((resolve, reject) => {
 		axios
 			.get(`https://www.bilibili.com/video/${bvid}`)
@@ -82,7 +82,7 @@ async function getBiliVideoInitialState(bvid) {
 	});
 }
 /** 获取 playInfo */
-async function getPlayinfo(bvid, cid) {
+export async function getPlayinfo(bvid, cid) {
 	if (!bvid || !cid) {
 		return;
 	}
@@ -116,7 +116,7 @@ async function getPlayinfo(bvid, cid) {
 		});
 }
 /** 解析 html 获取 initialState, 失败返回 null  */
-function parseHTMLGetInitalState(html) {
+export function parseHTMLGetInitalState(html) {
 	let $ = cheerio.load(html);
 	let scripts = $('script');
 	let initialState = null;
@@ -138,7 +138,7 @@ function parseHTMLGetInitalState(html) {
 	return JSON.parse(initialState);
 }
 /** 获取视频封面路径 */
-function getVideoCover(bvid) {
+export function getVideoCover(bvid) {
 	return new Promise(async (resolve, reject) => {
 		await axios
 			.get(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
@@ -162,7 +162,7 @@ function getVideoCover(bvid) {
  * @param {string} bv 视频 bv 号
  * @returns
  */
-async function getAudio(playInfo, partialrange, req, res) {
+export async function getAudio(playInfo, partialrange, req, res) {
 	let src = playInfo.dash.audio[0].baseUrl;
 	let range = req.headers.range;
 	if (!range) {
@@ -226,7 +226,7 @@ async function getAudio(playInfo, partialrange, req, res) {
 //  * @param {string} path music path
 //  * @param {string} param1 title, singer
 //  */
-// async function saveAudio(path, { title, singers, cover, duration }) {
+// export async function saveAudio(path, { title, singers, cover, duration }) {
 //     if (!title || !singers) {
 //         console.log(`title or singer not found`)
 //         return null;
@@ -272,12 +272,3 @@ async function getAudio(playInfo, partialrange, req, res) {
 //         return response.insertId
 //     });
 // }
-
-module.exports = {
-	getBiliVideoInitialState,
-	getPlayinfo,
-	parseHTMLGetInitalState,
-	getVideoCover,
-	getAudio,
-	// saveAudio
-};

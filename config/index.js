@@ -1,9 +1,1 @@
-
-const musicPath = 'D:/cloud_music'
-
-
-
-module.exports = {
-    musicPath,
-}
-
+export const musicPath = 'D:/cloud_music';

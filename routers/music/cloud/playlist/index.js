@@ -1,13 +1,9 @@
-const router = require('express').Router();
-const {
-	personalized,
-	top_playlist_highquality,
-	createRequest,
-	playlist_track_all,
-	playlist_detail,
-} = require('NeteaseCloudMusicApi');
-const axios = require('axios');
-
+import express from 'express';
+const router = express.Router();
+import NeteaseCloudMusicApi from 'NeteaseCloudMusicApi';
+import axios from 'axios';
+const { personalized, top_playlist_highquality, createRequest, playlist_track_all, playlist_detail } =
+	NeteaseCloudMusicApi;
 /** 每日随机推荐, limit 为歌单数 */
 router.get('/personalized', (req, res) => {
 	const { limit } = req.query;
@@ -164,9 +160,7 @@ router.get('/import', async (req, res) => {
 		});
 });
 
-module.exports = {
-	router,
-};
+export default router;
 
 /** playlist_track_all.js 改写
 module.exports = (query, request) => {

@@ -13,5 +13,6 @@
 		"start": "node index.js",
 		"dev": "node index.js",
 		"build": "node index.js"
-	}
+	},
+	"type": "module"
 }

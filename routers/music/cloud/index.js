@@ -1,9 +1,13 @@
-const { createRequest, song_url } = require('NeteaseCloudMusicApi');
-const router = require('express').Router();
-const { getCloudMusicInfoWithId } = require('./utils');
+import express from 'express';
+const router = express.Router();
+import NeteaseCloudMusicApi from 'NeteaseCloudMusicApi';
+import { getCloudMusicInfoWithId } from './utils.js';
+const { createRequest, song_url } = NeteaseCloudMusicApi;
 
-router.use('/playlist', require('./playlist').router);
-router.use('/user', require('./user').router);
+import playlistRouter from './playlist/index.js';
+import userRouter from './user/index.js';
+router.use('/playlist', playlistRouter);
+router.use('/user', userRouter);
 
 router.get('/info', (req, res) => {
 	const { ids } = req.query;
@@ -56,6 +60,4 @@ router.get('/:id', (req, res) => {
 		});
 });
 
-module.exports = {
-	router,
-};
+export default router;

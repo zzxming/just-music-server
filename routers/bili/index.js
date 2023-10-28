@@ -1,6 +1,8 @@
-const router = require('express').Router();
-const { getBiliVideoInitialState, getAudio, getPlayinfo, parseHTMLGetInitalState } = require('./utils');
-const axios = require('axios');
+import express from 'express';
+import { getBiliVideoInitialState, getAudio, getPlayinfo, parseHTMLGetInitalState } from './utils.js';
+import axios from 'axios';
+
+const router = express.Router();
 
 router.get('/playlist', (req, res) => {
 	let { bv } = req.query;
@@ -146,7 +148,4 @@ router.get('/audio', async (req, res) => {
 // })
 
 // 如果视频带分p, 获取会有问题
-
-module.exports = {
-	router,
-};
+export default router;

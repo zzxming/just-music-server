@@ -1,5 +1,8 @@
-const router = require('express').Router();
-const { cloudsearch } = require('NeteaseCloudMusicApi');
+import express from 'express';
+const router = express.Router();
+
+import NeteaseCloudMusicApi from 'NeteaseCloudMusicApi';
+const { cloudsearch } = NeteaseCloudMusicApi;
 // const { dbQuery } = require('../../../tools');
 
 // router.get('/local', async (req, res) => {
@@ -85,6 +88,4 @@ router.get('/cloud', async (req, res) => {
 	});
 });
 
-module.exports = {
-	router,
-};
+export default router;
