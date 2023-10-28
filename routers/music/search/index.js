@@ -1,55 +1,55 @@
 const router = require('express').Router();
 const { cloudsearch } = require('NeteaseCloudMusicApi');
-const { dbQuery } = require('../../../tools');
+// const { dbQuery } = require('../../../tools');
 
-router.get('/local', async (req, res) => {
-	let { kw: keywords, t: type, limit, offset } = req.query;
-	if (!type) type = 1;
-	if (!offset) offset = 10;
-	if (!limit) limit = 1;
-	dbQuery(`
-        select
-            m.* 
-        from 
-            music m, singer s
-        where 
-            m.music_name like '%${keywords}%' and s.singer_id = m.singer_id 
-        limit 
-            ${(limit - 1) * offset}, ${offset}
-    `)
-		.then(async (localData) => {
-			let locaResultData = [];
-			// console.log(localData)
-			for (let index = 0; index < localData.length; index++) {
-				// 歌手 id 由逗号字符串拼接而成
-				let resultData = localData[index];
-				const singer_id = resultData.singer_id;
-				delete resultData.singer_id;
-				let singers_id = singer_id.split(',');
-				// console.log(singers_id)
-				let singers = [];
-				await Promise.all(
-					singers_id.map(async (singerId) => {
-						let result = await dbQuery(`select * from singer where singer_id ='${singerId}'`);
-						if (result.length < 1) return;
-						singers.push({ ...result[0] });
-					})
-				);
-				// console.log(singers)
-				locaResultData[index] = { ...resultData, singers };
-			}
-			// console.log(locaResultData)
-			res.send({ code: 1, data: [...locaResultData] });
-		})
-		.catch((e) => {
-			console.log(e);
-			res.send({
-				code: 0,
-				error: e,
-				message: e.message,
-			});
-		});
-});
+// router.get('/local', async (req, res) => {
+// 	let { kw: keywords, t: type, limit, offset } = req.query;
+// 	if (!type) type = 1;
+// 	if (!offset) offset = 10;
+// 	if (!limit) limit = 1;
+// 	dbQuery(`
+//         select
+//             m.*
+//         from
+//             music m, singer s
+//         where
+//             m.music_name like '%${keywords}%' and s.singer_id = m.singer_id
+//         limit
+//             ${(limit - 1) * offset}, ${offset}
+//     `)
+// 		.then(async (localData) => {
+// 			let locaResultData = [];
+// 			// console.log(localData)
+// 			for (let index = 0; index < localData.length; index++) {
+// 				// 歌手 id 由逗号字符串拼接而成
+// 				let resultData = localData[index];
+// 				const singer_id = resultData.singer_id;
+// 				delete resultData.singer_id;
+// 				let singers_id = singer_id.split(',');
+// 				// console.log(singers_id)
+// 				let singers = [];
+// 				await Promise.all(
+// 					singers_id.map(async (singerId) => {
+// 						let result = await dbQuery(`select * from singer where singer_id ='${singerId}'`);
+// 						if (result.length < 1) return;
+// 						singers.push({ ...result[0] });
+// 					})
+// 				);
+// 				// console.log(singers)
+// 				locaResultData[index] = { ...resultData, singers };
+// 			}
+// 			// console.log(locaResultData)
+// 			res.send({ code: 1, data: [...locaResultData] });
+// 		})
+// 		.catch((e) => {
+// 			console.log(e);
+// 			res.send({
+// 				code: 0,
+// 				error: e,
+// 				message: e.message,
+// 			});
+// 		});
+// });
 router.get('/cloud', async (req, res) => {
 	let { kw: keywords, t: type, limit, pageSize = 20 } = req.query;
 	if (isNaN(pageSize)) pageSize = 20;
